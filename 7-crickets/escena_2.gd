@@ -7,7 +7,7 @@ var dialogos := [
 ]
 
 #ruta de la escena a la que se pasa cuando termina el diálogo.
-@export var escena_siguiente: String = "res://Escenas/Escena3.tscn"
+@export var escena_siguiente: String = "res://Escenas/escena3.tscn"
 
 #velocidad del tipeo 
 @export var velocidad_letra: float = 0.03
@@ -30,7 +30,7 @@ func _ready() -> void:
 
 	#fondo placeholder aquí luego irá el fondoreal
 	var fondo := ColorRect.new()
-	fondo.color = Color(0.85, 0.92, 1.0)  
+	fondo.color = Color(0.85, 0.92, 1.0)
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
 	capa_ui.add_child(fondo)
 
@@ -47,11 +47,15 @@ func _crear_caja_nombre() -> void:
 	panel.custom_minimum_size = Vector2(280, 85)
 	panel.size = Vector2(280, 85)
 
-	var estilo := StyleBoxFlat.new()
-	estilo.bg_color = Color(1, 1, 1, 0.95)
-	estilo.border_color = Color(0.15, 0.15, 0.15)
-	estilo.set_border_width_all(4)
-	estilo.set_corner_radius_all(10)
+	# --- Aquí se usa tu imagen en vez del rectángulo de color ---
+	var estilo := StyleBoxTexture.new()
+	estilo.texture = load("res://images/nombre_texto.png")
+	# Si tu imagen tiene borde/marco dibujado y el texto se ve pegado
+	# a la orilla, sube estos valores hasta que se vea centrado bien.
+	estilo.content_margin_left = 20
+	estilo.content_margin_right = 20
+	estilo.content_margin_top = 10
+	estilo.content_margin_bottom = 10
 	panel.add_theme_stylebox_override("panel", estilo)
 	capa_ui.add_child(panel)
 
@@ -68,11 +72,10 @@ func _crear_caja_texto() -> void:
 	panel.custom_minimum_size = Vector2(1700, 280)
 	panel.size = Vector2(1700, 280)
 
-	var estilo := StyleBoxFlat.new()
-	estilo.bg_color = Color(1, 1, 1, 0.95)
-	estilo.border_color = Color(0.15, 0.15, 0.15)
-	estilo.set_border_width_all(4)
-	estilo.set_corner_radius_all(14)
+	# imagen 
+	var estilo := StyleBoxTexture.new()
+	estilo.texture = load("res://images/caja_texto.png")
+	# no quede pegado al borde dibujado la imagen
 	estilo.content_margin_left = 45
 	estilo.content_margin_right = 45
 	estilo.content_margin_top = 35
@@ -139,7 +142,7 @@ func _animar_indicador() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		if escribiendo:
-			# Enter durante el tipeo completar instantáneamente
+		# Enter durante el tipeo completar instantáneamente
 			if tween_texto:
 				tween_texto.kill()
 			caja_texto.visible_characters = dialogos[indice_dialogo]["texto"].length()
