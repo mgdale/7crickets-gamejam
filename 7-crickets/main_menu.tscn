@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bxjejmvo8dr5i"]
 
-[ext_resource type="Script" uid="uid://bwy2qs3q3sxlj" path="res://main_menu.gd" id="1_r8uxs"]
+[ext_resource type="Script" path="res://main_menu.gd" id="1_r8uxs"]
 [ext_resource type="Texture2D" uid="uid://r7psdxe5g7n0" path="res://images/PLAY_BOTTON.png" id="2_glbon"]
 [ext_resource type="Texture2D" uid="uid://bx5k4yb2pwb5u" path="res://images/credits_BOTTON.png" id="3_nlkkf"]
 [ext_resource type="Texture2D" uid="uid://bckjaqxlroq57" path="res://images/quit_BOTTON.png" id="4_qe12f"]
@@ -10,8 +10,6 @@
 default_font_size = 16
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_glbon"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wi6ju"]
 
 [node name="MainMenu" type="Control" unique_id=927006652]
 layout_mode = 3
@@ -74,7 +72,6 @@ custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 texture_normal = ExtResource("5_8qtwp")
-texture_hover = SubResource("PlaceholderTexture2D_wi6ju")
 
 [node name="ColorRect" type="TextureRect" parent="." unique_id=4039032]
 z_index = -4096
