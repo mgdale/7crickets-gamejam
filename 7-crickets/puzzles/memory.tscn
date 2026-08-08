@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cvt1o618ni642" path="res://puzzles/memory.gd" id="1_oxqmb"]
 [ext_resource type="PackedScene" uid="uid://u074h4jhed5q" path="res://puzzles/card.tscn" id="2_qusu5"]
 
-[node name="Memoria" type="Control" unique_id=1698899211]
+[node name="Memory" type="Control" unique_id=1698899211]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_oxqmb")
@@ -47,3 +47,10 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 text = "Intentalo de nuevo..."
+
+[node name="WinMessage" type="Label" parent="." unique_id=373633479]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "¡Bien hecho!"

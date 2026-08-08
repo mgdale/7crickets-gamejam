@@ -52,3 +52,15 @@ offset_right = 658.0
 offset_bottom = 108.0
 text = "5"
 icon = ExtResource("2_wbfb5")
+
+[node name="LoseMessage" type="Label" parent="." unique_id=74291301]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="WinMessage" type="Label" parent="." unique_id=824865708]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

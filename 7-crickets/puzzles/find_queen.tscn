@@ -28,3 +28,15 @@ offset_left = 400.0
 offset_top = 100.0
 offset_right = 500.0
 offset_bottom = 240.0
+
+[node name="LoseMessage" type="Label" parent="." unique_id=357921800]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="WinMessage" type="Label" parent="." unique_id=2038139760]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

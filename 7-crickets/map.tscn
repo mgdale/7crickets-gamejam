@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://fhefo2rvfufh"]
+
+[ext_resource type="Script" uid="uid://cke27gm1h6cng" path="res://map.gd" id="1_c7s6e"]
+
+[node name="Map" type="Control" unique_id=1699404460]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_c7s6e")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=790570234]
+layout_mode = 0
+offset_right = 800.0
+offset_bottom = 600.0
+color = Color(0.9490196, 0.75686276, 0.67058825, 1)
+
+[node name="CharmMemory" type="Button" parent="." unique_id=747972779]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 300.0
+offset_right = 658.0
+offset_bottom = 308.0
+text = "Memory"
+
+[node name="CharmFindQueen" type="Button" parent="." unique_id=395704367]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 100.0
+offset_right = 58.0
+offset_bottom = 108.0
+text = "FindQueen"
+
+[node name="CharmSimon" type="Button" parent="." unique_id=1949370542]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 200.0
+offset_right = 408.0
+offset_bottom = 208.0
+text = "SimonSays"

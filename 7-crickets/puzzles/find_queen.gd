@@ -1,11 +1,16 @@
 extends Control
 
+@onready var win_message = $WinMessage
+@onready var lose_message = $LoseMessage
+
 var cards = []
 var positions = []
 var queen_id = 1
 
 func _ready():
-	cards = get_children()
+	win_message.visible = false
+	lose_message.visible = false
+	cards = get_children().filter(func(n): return n.has_method("flip"))
 
 	for card in cards:
 		positions.append(card.position)
@@ -60,10 +65,15 @@ func swap(card_a, card_b):
 func _on_card_pressed(card):
 	card.flip(true)
 	if card.card_id == queen_id:
-		print("You won, found the queen!")
+		win_message.visible = true
+		await get_tree().create_timer(1.5).timeout
+		win_message.visible = false
+		GameState.complete_current_puzzle()
 	else:
-		print("You lost")
-		await get_tree().create_timer(1.0).timeout
+		lose_message.visible = true
+		await get_tree().create_timer(1.5).timeout
+		lose_message.visible = false
+		await get_tree().create_timer(0.5).timeout
 		restart()
 
 

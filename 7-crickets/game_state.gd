@@ -15,9 +15,9 @@ const PUZZLE_PATHS = {
 
 var current_puzzle = ""
 
-func go_to_puzzle(name: String):
-	current_puzzle = name
-	get_tree().change_scene_to_file(PUZZLE_PATHS[name])
+func go_to_puzzle(puzzle_name: String):
+	current_puzzle = puzzle_name
+	get_tree().change_scene_to_file(PUZZLE_PATHS[puzzle_name])
 
 func complete_current_puzzle():
 	puzzles_solved[current_puzzle] = true

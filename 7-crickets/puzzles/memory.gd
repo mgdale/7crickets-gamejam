@@ -1,6 +1,7 @@
 extends Control
 
 @onready var grid = $GridContainer
+@onready var win_message = $WinMessage
 @onready var lose_message = $LoseMessage
 
 var cards = []
@@ -10,6 +11,8 @@ var waiting = false
 
 
 func _ready():
+	win_message.visible = false
+	lose_message.visible = false
 	cards = grid.get_children()
 	assign_ids()
 	show_face_up()
@@ -62,17 +65,17 @@ func _on_card_pressed(card):
 
 func compare_cards():
 	if first_card.card_id == second_card.card_id:
-		print("Pair found!")
 		first_card.found = true
 		second_card.found = true
-		first_card = null
-		second_card = null
-		waiting = false
+		win_message.visible = true
+		await get_tree().create_timer(1.5).timeout
+		win_message.visible = false
+		GameState.complete_current_puzzle()
 	else:
 		lose_message.visible = true
 		await get_tree().create_timer(1.5).timeout
 		lose_message.visible = false
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(0.5).timeout
 		restart_game()
 
 
