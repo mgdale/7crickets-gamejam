@@ -1,77 +1,77 @@
 extends Control
 
-var cartas = []
-var posiciones = []  # guarda las posiciones fijas (100,100 / 250,100 / 400,100)
-var id_reina = 1      # id que identifica a la carta reina
+var cards = []
+var positions = []
+var queen_id = 1
 
 func _ready():
-	cartas = get_children()
+	cards = get_children()
 
-	for carta in cartas:
-		posiciones.append(carta.position)  # guarda posición inicial de cada una
+	for card in cards:
+		positions.append(card.position)
 
-	asignar_reina()
-	mostrar_boca_arriba()
+	assign_queen()
+	show_face_up()
 
-	for carta in cartas:
-		carta.pressed.connect(_on_carta_pressed.bind(carta))
+	for card in cards:
+		card.pressed.connect(_on_card_pressed.bind(card))
 
 	await get_tree().create_timer(3.0).timeout
-	ocultar_cartas()
-	await mezclar()
+	hide_cards()
+	await shuffle()
 
 
-func asignar_reina():
-	cartas.shuffle()  # revuelve el orden de la lista (no las posiciones visuales)
-	cartas[0].id_carta = id_reina
-	cartas[1].id_carta = 101
-	cartas[2].id_carta = 102
+func assign_queen():
+	cards.shuffle()
+	cards[0].card_id = queen_id
+	cards[1].card_id = 101
+	cards[2].card_id = 102
 
 
-func mostrar_boca_arriba():
-	for carta in cartas:
-		carta.voltear(true)
+func show_face_up():
+	for card in cards:
+		card.flip(true)
 
 
-func ocultar_cartas():
-	for carta in cartas:
-		carta.voltear(false)
+func hide_cards():
+	for card in cards:
+		card.flip(false)
 
 
-func mezclar():
-	for i in range(4):  # 4 intercambios
-		var a = randi() % cartas.size()
-		var b = randi() % cartas.size()
+func shuffle():
+	for i in range(4):
+		var a = randi() % cards.size()
+		var b = randi() % cards.size()
 		if a != b:
-			await intercambiar(cartas[a], cartas[b])
+			await swap(cards[a], cards[b])
 
 
-func intercambiar(carta_a, carta_b):
-	var pos_a = carta_a.position
-	var pos_b = carta_b.position
+func swap(card_a, card_b):
+	var pos_a = card_a.position
+	var pos_b = card_b.position
 
-	var tween = create_tween()  # anima el movimiento suavemente
-	tween.tween_property(carta_a, "position", pos_b, 0.4)
-	tween.parallel().tween_property(carta_b, "position", pos_a, 0.4)
+	var tween = create_tween()
+	tween.tween_property(card_a, "position", pos_b, 0.4)
+	tween.parallel().tween_property(card_b, "position", pos_a, 0.4)
 
-	await tween.finished  # espera a que termine la animación
+	await tween.finished
 
 
-func _on_carta_pressed(carta):
-	carta.voltear(true)
-	if carta.id_carta == id_reina:
-		print("¡Ganaste, encontraste la reina!")
+func _on_card_pressed(card):
+	card.flip(true)
+	if card.card_id == queen_id:
+		print("You won, found the queen!")
 	else:
-		print("Has perdido")
+		print("You lost")
 		await get_tree().create_timer(1.0).timeout
-		reiniciar()
+		restart()
 
 
-func reiniciar():
-	for carta in cartas:
-		carta.encontrada = false
-	asignar_reina()
-	mostrar_boca_arriba()
+func restart():
+	for card in cards:
+		card.found = false
+	assign_queen()
+	show_face_up()
 	await get_tree().create_timer(3.0).timeout
-	ocultar_cartas()
-	await mezclar()
+	hide_cards()
+	await shuffle()

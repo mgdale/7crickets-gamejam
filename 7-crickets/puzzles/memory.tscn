@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://bbe5ye7tlrkvb"]
+
+[ext_resource type="Script" uid="uid://cvt1o618ni642" path="res://puzzles/memory.gd" id="1_oxqmb"]
+[ext_resource type="PackedScene" uid="uid://u074h4jhed5q" path="res://puzzles/card.tscn" id="2_qusu5"]
+
+[node name="Memoria" type="Control" unique_id=1698899211]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_oxqmb")
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=610277297]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 3
+
+[node name="Card1" parent="GridContainer" unique_id=823948239 instance=ExtResource("2_qusu5")]
+layout_mode = 2
+
+[node name="Card2" parent="GridContainer" unique_id=1230155615 instance=ExtResource("2_qusu5")]
+layout_mode = 2
+
+[node name="Card3" parent="GridContainer" unique_id=786586828 instance=ExtResource("2_qusu5")]
+layout_mode = 2
+
+[node name="Card4" parent="GridContainer" unique_id=1282120086 instance=ExtResource("2_qusu5")]
+layout_mode = 2
+
+[node name="Card5" parent="GridContainer" unique_id=781946766 instance=ExtResource("2_qusu5")]
+layout_mode = 2
+
+[node name="Card6" parent="GridContainer" unique_id=485457025 instance=ExtResource("2_qusu5")]
+layout_mode = 2
+
+[node name="Card7" parent="GridContainer" unique_id=691571889 instance=ExtResource("2_qusu5")]
+layout_mode = 2
+
+[node name="Card8" parent="GridContainer" unique_id=547922372 instance=ExtResource("2_qusu5")]
+layout_mode = 2
+
+[node name="Card9" parent="GridContainer" unique_id=743630433 instance=ExtResource("2_qusu5")]
+layout_mode = 2
+
+[node name="LoseMessage" type="Label" parent="." unique_id=1338631712]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Intentalo de nuevo..."
