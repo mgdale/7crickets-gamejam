@@ -1,16 +1,14 @@
 extends Node2D
 
 var dialogos := [
-	{"nombre": "???", "texto": "El sol apenas empezaba a asomarse sobre la ciudad."},
-	{"nombre": "Personaje", "texto": "No pensé que terminaría aquí, de todos los lugares posibles."},
-	{"nombre": "Personaje", "texto": "Pero bueno... no hay vuelta atrás ahora."},
+	{"nombre": "???", "texto": "Texto de ejemplo para la escena 3."},
+	{"nombre": "Personaje", "texto": "Aquí va el siguiente diálogo."},
+	{"nombre": "Personaje", "texto": "Y este es el último de esta escena."},
 ]
 
-#ruta de la escena a la que se pasa cuando termina el diálogo.
 @export var escena_siguiente: String = "res://Escenas/escena4.tscn"
-
-#velocidad del tipeo 
 @export var velocidad_letra: float = 0.03
+
 var capa_ui: CanvasLayer
 var caja_texto: RichTextLabel
 var caja_nombre: Label
@@ -27,9 +25,8 @@ func _ready() -> void:
 	capa_ui.layer = 1
 	add_child(capa_ui)
 
-	#fondo placeholder aquí luego irá el fondoreal
 	var fondo := ColorRect.new()
-	fondo.color = Color(0.85, 0.92, 1.0)
+	fondo.color = Color(0.829, 0.929, 0.989, 1.0)
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
 	capa_ui.add_child(fondo)
 
@@ -48,8 +45,6 @@ func _crear_caja_nombre() -> void:
 
 	var estilo := StyleBoxTexture.new()
 	estilo.texture = load("res://images/nombre_texto.png")
-	# Si tu imagen tiene borde/marco dibujado y el texto se ve pegado
-	# a la orilla, sube estos valores hasta que se vea centrado bien.
 	estilo.content_margin_left = 20
 	estilo.content_margin_right = 20
 	estilo.content_margin_top = 10
@@ -92,7 +87,7 @@ func _crear_indicador() -> void:
 	indicador = Label.new()
 	indicador.text = "▼"
 	indicador.add_theme_font_size_override("font_size", 26)
-	indicador.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
+	indicador.add_theme_color_override("font_color", Color(0.238, 0.186, 0.18, 1.0))
 	indicador.position = Vector2(1740, 990)
 	indicador.visible = false
 	capa_ui.add_child(indicador)
@@ -138,7 +133,6 @@ func _animar_indicador() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		if escribiendo:
-			# Enter durante el tipeo completar instantáneamente
 			if tween_texto:
 				tween_texto.kill()
 			caja_texto.visible_characters = dialogos[indice_dialogo]["texto"].length()
