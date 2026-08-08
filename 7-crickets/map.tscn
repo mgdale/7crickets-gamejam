@@ -1,17 +1,20 @@
 [gd_scene format=3 uid="uid://fhefo2rvfufh"]
 
 [ext_resource type="Script" uid="uid://cke27gm1h6cng" path="res://map.gd" id="1_c7s6e"]
+[ext_resource type="Texture2D" uid="uid://d0l7hskwbff25" path="res://icon.svg" id="2_wijl4"]
 
 [node name="Map" type="Control" unique_id=1699404460]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_c7s6e")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=790570234]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1878873967]
 layout_mode = 0
-offset_right = 800.0
-offset_bottom = 600.0
-color = Color(0.9490196, 0.75686276, 0.67058825, 1)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_wijl4")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="CharmMemory" type="Button" parent="." unique_id=747972779]
 layout_mode = 0

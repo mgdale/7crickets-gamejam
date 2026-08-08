@@ -22,7 +22,7 @@ func _on_play_pressed() -> void:
 	var tween := create_tween()
 	tween.tween_property(fade, "color:a", 1.0, 0.5)
 	tween.tween_callback(func():
-		get_tree().change_scene_to_file("res://Escenas/escena1.tscn")
+		get_tree().change_scene_to_file("res://scene1.tscn")
 	)
 
 func _on_credits_pressed() -> void:
