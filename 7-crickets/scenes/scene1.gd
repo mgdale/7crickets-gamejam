@@ -34,12 +34,12 @@ func _ready() -> void:
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
 	capa_ui.add_child(fondo)
 
-	# personaje placeholder, se ve "dormido" al inicio
 	personaje = TextureRect.new()
 	personaje.position = Vector2(700, 300)
 	personaje.custom_minimum_size = Vector2(400, 400)
-	personaje.modulate = Color(0.6, 0.6, 0.6)  # placeholder: gris = dormido
 	capa_ui.add_child(personaje)
+
+	mostrar_dormido()
 
 	_crear_caja_nombre()
 	_crear_caja_texto()
@@ -47,16 +47,23 @@ func _ready() -> void:
 
 	caja_nombre.visible = false
 	caja_texto.get_parent().visible = false
-	# oculta el diálogo mientras "duerme"
 
 	await get_tree().create_timer(2.5).timeout
 	despertar()
 
 
+func mostrar_dormido() -> void:
+	# placeholder: cuando haya arte, reemplazar por textura ojos cerrados
+	personaje.modulate = Color(0.6, 0.6, 0.6)
+	# personaje.texture = load("res://images/personaje_dormido.png")
+
+
 func despertar() -> void:
 	despierto = true
-	personaje.modulate = Color(1, 1, 1)  # placeholder: color normal = despierto
-	# cuando haya arte real: personaje.texture = load("res://images/personaje_despierto.png")
+	var tween = create_tween()
+	tween.tween_property(personaje, "modulate", Color(1, 1, 1), 0.8)
+	# placeholder: cuando haya arte, reemplazar por textura ojos abiertos
+	# personaje.texture = load("res://images/personaje_despierto.png")
 
 	caja_nombre.visible = true
 	caja_texto.get_parent().visible = true
@@ -158,7 +165,7 @@ func _animar_indicador() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not despierto:
-		return  # no reacciona a clicks mientras duerme
+		return
 	if event.is_action_pressed("ui_accept"):
 		if escribiendo:
 			if tween_texto:
@@ -188,3 +195,4 @@ func _cambiar_escena(ruta: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(fade, "color:a", 1.0, 0.4)
 	tween.tween_callback(func(): get_tree().change_scene_to_file(ruta))
+	
