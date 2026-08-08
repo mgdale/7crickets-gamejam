@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://bxjejmvo8dr5i"]
+
+[ext_resource type="Script" uid="uid://cjk538gm4c6la" path="res://main_menu.gd" id="1_r8uxs"]
+
+[sub_resource type="Theme" id="Theme_gify6"]
+default_font_size = 16
+
+[node name="MainMenu" type="Control" unique_id=927006652]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_r8uxs")
+
+[node name="Title" type="Label" parent="." unique_id=1696647111]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 500.0
+theme_override_font_sizes/font_size = 200
+text = "Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1564307816]
+layout_mode = 0
+offset_top = 500.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+theme = SubResource("Theme_gify6")
+
+[node name="mainButtons" type="VBoxContainer" parent="CenterContainer" unique_id=1127752281]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 52
+
+[node name="play" type="Button" parent="CenterContainer/mainButtons" unique_id=1283193719]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "PLAY"
+
+[node name="credits" type="Button" parent="CenterContainer/mainButtons" unique_id=1521696025]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "CREDITS"
+
+[node name="quit" type="Button" parent="CenterContainer/mainButtons" unique_id=599129425]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "QUIT"
+
+[node name="creditsMenu" type="VBoxContainer" parent="CenterContainer" unique_id=1051212024]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/creditsMenu" unique_id=1182623639]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+text = "A game by ...."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="back" type="Button" parent="CenterContainer/creditsMenu" unique_id=432314392]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 60
+text = "BACK"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1451775536]
+z_index = -4096
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.81122553, 0.1398055, 0.1810408, 1)
+
+[connection signal="pressed" from="CenterContainer/mainButtons/play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="CenterContainer/mainButtons/quit" to="." method="_on_quit_pressed"]
