@@ -1,9 +1,17 @@
 [gd_scene format=3 uid="uid://bxjejmvo8dr5i"]
 
-[ext_resource type="Script" uid="uid://cjk538gm4c6la" path="res://main_menu.gd" id="1_r8uxs"]
+[ext_resource type="Script" uid="uid://bwy2qs3q3sxlj" path="res://main_menu.gd" id="1_r8uxs"]
+[ext_resource type="Texture2D" uid="uid://r7psdxe5g7n0" path="res://images/PLAY_BOTTON.png" id="2_glbon"]
+[ext_resource type="Texture2D" uid="uid://bx5k4yb2pwb5u" path="res://images/credits_BOTTON.png" id="3_nlkkf"]
+[ext_resource type="Texture2D" uid="uid://bckjaqxlroq57" path="res://images/quit_BOTTON.png" id="4_qe12f"]
+[ext_resource type="Texture2D" uid="uid://bj2q3pmmb6ck8" path="res://images/back_BOTTON.png" id="5_8qtwp"]
 
 [sub_resource type="Theme" id="Theme_gify6"]
 default_font_size = 16
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_glbon"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wi6ju"]
 
 [node name="MainMenu" type="Control" unique_id=927006652]
 layout_mode = 3
@@ -35,20 +43,18 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 52
 
-[node name="play" type="Button" parent="CenterContainer/mainButtons" unique_id=1283193719]
+[node name="play" type="TextureButton" parent="CenterContainer/mainButtons" unique_id=1683632637]
 layout_mode = 2
-theme_override_font_sizes/font_size = 60
-text = "PLAY"
+texture_normal = ExtResource("2_glbon")
 
-[node name="credits" type="Button" parent="CenterContainer/mainButtons" unique_id=1521696025]
+[node name="credits" type="TextureButton" parent="CenterContainer/mainButtons" unique_id=658695815]
 layout_mode = 2
-theme_override_font_sizes/font_size = 60
-text = "CREDITS"
+texture_normal = ExtResource("3_nlkkf")
 
-[node name="quit" type="Button" parent="CenterContainer/mainButtons" unique_id=599129425]
+[node name="quit" type="TextureButton" parent="CenterContainer/mainButtons" unique_id=1559552451]
 layout_mode = 2
-theme_override_font_sizes/font_size = 60
-text = "QUIT"
+texture_normal = ExtResource("4_qe12f")
+texture_pressed = SubResource("ViewportTexture_glbon")
 
 [node name="creditsMenu" type="VBoxContainer" parent="CenterContainer" unique_id=1051212024]
 unique_name_in_owner = true
@@ -63,14 +69,14 @@ text = "A game by ...."
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="back" type="Button" parent="CenterContainer/creditsMenu" unique_id=432314392]
+[node name="back" type="TextureButton" parent="CenterContainer/creditsMenu" unique_id=149688442]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 60
-text = "BACK"
+texture_normal = ExtResource("5_8qtwp")
+texture_hover = SubResource("PlaceholderTexture2D_wi6ju")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1451775536]
+[node name="ColorRect" type="TextureRect" parent="." unique_id=4039032]
 z_index = -4096
 layout_mode = 1
 anchors_preset = 15
@@ -79,9 +85,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.81122553, 0.1398055, 0.1810408, 1)
 
 [connection signal="pressed" from="CenterContainer/mainButtons/play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/quit" to="." method="_on_quit_pressed"]
