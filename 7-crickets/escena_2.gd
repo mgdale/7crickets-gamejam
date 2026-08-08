@@ -47,7 +47,6 @@ func _crear_caja_nombre() -> void:
 	panel.custom_minimum_size = Vector2(280, 85)
 	panel.size = Vector2(280, 85)
 
-	# --- Aquí se usa tu imagen en vez del rectángulo de color ---
 	var estilo := StyleBoxTexture.new()
 	estilo.texture = load("res://images/nombre_texto.png")
 	# Si tu imagen tiene borde/marco dibujado y el texto se ve pegado
