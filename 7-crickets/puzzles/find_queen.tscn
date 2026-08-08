@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://d3nr7s1m3wwxs"]
+
+[ext_resource type="Script" uid="uid://cakgjikrcjdxf" path="res://puzzles/find_queen.gd" id="1_beoh8"]
+[ext_resource type="PackedScene" uid="uid://u074h4jhed5q" path="res://puzzles/carta.tscn" id="2_2gede"]
+
+[node name="FindQueen" type="Control" unique_id=1808720680]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_beoh8")
+
+[node name="Carta" parent="." unique_id=823948239 instance=ExtResource("2_2gede")]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 100.0
+offset_right = 200.0
+offset_bottom = 240.0
+
+[node name="Carta2" parent="." unique_id=1494509012 instance=ExtResource("2_2gede")]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 100.0
+offset_right = 350.0
+offset_bottom = 240.0
+
+[node name="Carta3" parent="." unique_id=1694059480 instance=ExtResource("2_2gede")]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 100.0
+offset_right = 500.0
+offset_bottom = 240.0

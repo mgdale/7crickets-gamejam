@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://u074h4jhed5q"]
+
+[ext_resource type="Script" uid="uid://b0nxj16667owp" path="res://puzzles/carta.gd" id="1_umtwa"]
+
+[node name="Carta" type="Button" unique_id=823948239]
+custom_minimum_size = Vector2(100, 140)
+script = ExtResource("1_umtwa")
