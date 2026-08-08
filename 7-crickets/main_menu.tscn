@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bxjejmvo8dr5i"]
 
-[ext_resource type="Script" uid="uid://cjk538gm4c6la" path="res://Escenas/main_menu.gd" id="1_r8uxs"]
+[ext_resource type="Script" uid="uid://cjk538gm4c6la" path="res://main_menu.gd" id="1_r8uxs"]
 
 [sub_resource type="Theme" id="Theme_gify6"]
 default_font_size = 16
