@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://bijddoadp2urb"]
 
+<<<<<<< HEAD:7-crickets/escena2.tscn
+[ext_resource type="Script" uid="uid://dm4rgplgivfl7" path="res://scenes/escena_2.gd" id="1_ry5nh"]
+=======
 [ext_resource type="Script" uid="uid://cuns51g41ehc0" path="res://scenes/escena_2.gd" id="1_ry5nh"]
+>>>>>>> b4fef4371df7bbe75785dd585d49576abcb9b330:7-crickets/scenes/escena2.tscn
 
 [node name="Node2D" type="Node2D" unique_id=1866602082]
 script = ExtResource("1_ry5nh")

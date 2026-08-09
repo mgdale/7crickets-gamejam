@@ -2,7 +2,32 @@ extends Node2D
 
 @export var escena_siguiente: String = "res://scenes/escena_3.tscn"
 
+<<<<<<< HEAD
 var imagen_fondo: TextureRect
+=======
+@export var escena_siguiente: String = "res://scenes/escena_3"
+@export var velocidad_letra: float = 0.03
+
+const ANCHO_PANTALLA := 1920
+
+const ANCHO_CAJA_TEXTO := 1600
+const ALTO_CAJA_TEXTO := 260
+const Y_CAJA_TEXTO := 760
+
+const ANCHO_CAJA_NOMBRE := 280
+const ALTO_CAJA_NOMBRE := 80
+const ESPACIO_ENTRE_CAJAS := 0
+
+var capa_ui: CanvasLayer
+var caja_texto: RichTextLabel
+var caja_nombre: Label
+var indicador: Label
+
+var indice_dialogo := 0
+var escribiendo := false
+var tween_texto: Tween
+var tween_indicador: Tween
+>>>>>>> 4f5dd8b500ea168061c5659c10ce6f4501db0d54
 
 
 func _ready() -> void:
