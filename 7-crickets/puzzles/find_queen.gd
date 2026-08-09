@@ -1,8 +1,5 @@
 extends Control
 
-@onready var win_message = $WinMessage
-@onready var lose_message = $LoseMessage
-
 var cards = []
 var positions = []
 var queen_id = 1
@@ -25,8 +22,6 @@ var dialogos_cerdo := [
 
 
 func _ready():
-	win_message.visible = false
-	lose_message.visible = false
 	cards = get_children().filter(func(n): return n.has_method("flip"))
 	for card in cards:
 		card.textura_dorso = load("res://images/sobre_queen.png")
@@ -219,9 +214,7 @@ func swap(card_a, card_b):
 func _on_card_pressed(card):
 	card.flip(true)
 	if card.card_id == queen_id:
-		win_message.visible = true
 		await get_tree().create_timer(1.5).timeout
-		win_message.visible = false
 		GameState.puzzles_solved[GameState.current_puzzle] = true
 		var memoria_lista = GameState.puzzles_solved.get("memory", false)
 		var simon_listo = GameState.puzzles_solved.get("simon", false)
@@ -230,9 +223,7 @@ func _on_card_pressed(card):
 		else:
 			get_tree().change_scene_to_file(GameState.MAP_SCENE)
 	else:
-		lose_message.visible = true
 		await get_tree().create_timer(1.5).timeout
-		lose_message.visible = false
 		await get_tree().create_timer(0.5).timeout
 		restart()
 
