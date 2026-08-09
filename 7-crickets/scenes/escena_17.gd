@@ -10,12 +10,17 @@ const ESCENA_MENU := "res://main_menu.tscn"
 
 const ANCHO_PANTALLA := 1920
 const ALTO_PANTALLA := 1080
-const ANCHO_CAJA_TEXTO := 1600
-const ALTO_CAJA_TEXTO := 260
-const Y_CAJA_TEXTO := 760
-const ANCHO_CAJA_NOMBRE := 280
-const ALTO_CAJA_NOMBRE := 80
+
+const ANCHO_CAJA_TEXTO := 1300
+const ALTO_CAJA_TEXTO := 180
+const Y_CAJA_TEXTO := 840
+
+const ANCHO_CAJA_NOMBRE := 240
+const ALTO_CAJA_NOMBRE := 64
 const ESPACIO_ENTRE_CAJAS := 0
+
+var fuente_nombre: FontFile = load("res://fonts/chinese rocks rg.otf")
+var fuente_texto: FontFile = load("res://fonts/Chinese_Ruler.ttf")
 
 @onready var boton_menu = $BotonMenu
 
@@ -91,17 +96,22 @@ func _crear_caja_nombre() -> void:
 
 	var estilo := StyleBoxTexture.new()
 	estilo.texture = load("res://images/nombre_texto.png")
+	estilo.texture_margin_left = 30
+	estilo.texture_margin_right = 30
+	estilo.texture_margin_top = 20
+	estilo.texture_margin_bottom = 20
 	estilo.content_margin_left = 20
 	estilo.content_margin_right = 20
-	estilo.content_margin_top = 20
-	estilo.content_margin_bottom = 20
+	estilo.content_margin_top = 12
+	estilo.content_margin_bottom = 12
 	panel.add_theme_stylebox_override("panel", estilo)
 	panel.self_modulate = Color(1, 1, 1, 0.65)
 	capa_ui.add_child(panel)
 	panel_nombre = panel
 
 	caja_nombre = Label.new()
-	caja_nombre.add_theme_font_size_override("font_size", 28)
+	caja_nombre.add_theme_font_override("font", fuente_nombre)
+	caja_nombre.add_theme_font_size_override("font_size", 32)
 	caja_nombre.add_theme_color_override("font_color", Color(0.85, 0.15, 0.15))
 	caja_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caja_nombre.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -117,10 +127,14 @@ func _crear_caja_texto() -> void:
 
 	var estilo := StyleBoxTexture.new()
 	estilo.texture = load("res://images/caja_texto.png")
+	estilo.texture_margin_left = 60
+	estilo.texture_margin_right = 60
+	estilo.texture_margin_top = 40
+	estilo.texture_margin_bottom = 40
 	estilo.content_margin_left = 45
 	estilo.content_margin_right = 45
-	estilo.content_margin_top = 35
-	estilo.content_margin_bottom = 35
+	estilo.content_margin_top = 20
+	estilo.content_margin_bottom = 20
 	panel.add_theme_stylebox_override("panel", estilo)
 	panel.self_modulate = Color(1, 1, 1, 0.65)
 	capa_ui.add_child(panel)
@@ -130,7 +144,8 @@ func _crear_caja_texto() -> void:
 	caja_texto.bbcode_enabled = false
 	caja_texto.scroll_active = false
 	caja_texto.fit_content = true
-	caja_texto.add_theme_font_size_override("normal_font_size", 28)
+	caja_texto.add_theme_font_override("normal_font", fuente_texto)
+	caja_texto.add_theme_font_size_override("normal_font_size", 36)
 	caja_texto.add_theme_color_override("default_color", Color(0.1, 0.1, 0.1))
 	panel.add_child(caja_texto)
 
