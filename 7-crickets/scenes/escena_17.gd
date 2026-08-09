@@ -47,12 +47,13 @@ func _ready() -> void:
 	imagen_fondo.texture = load("res://images/fondo13.png")
 	capa_ui.add_child(imagen_fondo)
 
-	boton_menu.get_parent().remove_child(boton_menu)
-	capa_ui.add_child(boton_menu)
-
 	_crear_caja_nombre()
 	_crear_caja_texto()
 	_crear_indicador()
+
+	# el botón se agrega AL FINAL, así queda por encima de todo
+	boton_menu.get_parent().remove_child(boton_menu)
+	capa_ui.add_child(boton_menu)
 
 	_mostrar_dialogo(indice_dialogo)
 

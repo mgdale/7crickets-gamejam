@@ -39,14 +39,14 @@ func parpadear(boton):
 func _on_boton_pressed(indice):
 	if mostrando:
 		return
-
 	input_jugador.append(indice)
 	var paso_actual = input_jugador.size() - 1
-
+	if paso_actual >= secuencia.size():
+		reiniciar()
+		return
 	if input_jugador[paso_actual] != secuencia[paso_actual]:
 		reiniciar()
 		return
-
 	if input_jugador.size() == secuencia.size():
 		if secuencia.size() >= 5:
 			GameState.puzzles_solved[GameState.current_puzzle] = true
@@ -55,7 +55,6 @@ func _on_boton_pressed(indice):
 			ronda += 1
 			await get_tree().create_timer(0.6).timeout
 			nueva_ronda()
-
 
 func reiniciar():
 	secuencia.clear()
