@@ -44,6 +44,71 @@ func _ready():
 	update_charms()
 	_mostrar_intro_lugar()
 
+func mostrar_notificacion(texto: String) -> void:
+	var capa := CanvasLayer.new()
+	capa.layer = 250
+	add_child(capa)
+
+	var overlay := ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	capa.add_child(overlay)
+
+	var t_fade := create_tween()
+	t_fade.tween_property(overlay, "color", Color(0, 0, 0, 0.5), 0.2)
+
+	var panel := PanelContainer.new()
+	var estilo := StyleBoxTexture.new()
+	estilo.texture = textura_caja
+	estilo.texture_margin_left = 60
+	estilo.texture_margin_right = 60
+	estilo.texture_margin_top = 40
+	estilo.texture_margin_bottom = 40
+	estilo.content_margin_left = 50
+	estilo.content_margin_right = 50
+	estilo.content_margin_top = 35
+	estilo.content_margin_bottom = 35
+	estilo.modulate_color = Color(1, 1, 1, 0.6)
+	panel.add_theme_stylebox_override("panel", estilo)
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.offset_left = -350
+	panel.offset_right = 350
+	panel.offset_top = -130
+	panel.offset_bottom = 130
+	panel.pivot_offset = Vector2(350, 130)
+	panel.scale = Vector2(0.7, 0.7)
+	panel.modulate.a = 0
+	overlay.add_child(panel)
+
+	var t_pop := create_tween()
+	t_pop.tween_property(panel, "scale", Vector2(1.0, 1.0), 0.25)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	t_pop.parallel().tween_property(panel, "modulate:a", 1.0, 0.2)
+
+	var contenido := VBoxContainer.new()
+	contenido.add_theme_constant_override("separation", 25)
+	contenido.alignment = BoxContainer.ALIGNMENT_CENTER
+	panel.add_child(contenido)
+
+	var mensaje := Label.new()
+	mensaje.text = texto
+	mensaje.add_theme_font_size_override("font_size", 30)
+	mensaje.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
+	mensaje.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	mensaje.autowrap_mode = TextServer.AUTOWRAP_WORD
+	if fuente_dialogo:
+		mensaje.add_theme_font_override("font", fuente_dialogo)
+	contenido.add_child(mensaje)
+
+	var boton_ok := _crear_boton_simbolo("✓", Color(0.15, 0.55, 0.2))
+	contenido.add_child(boton_ok)
+
+	boton_ok.pressed.connect(func():
+		var t_cierre := create_tween()
+		t_cierre.tween_property(overlay, "modulate:a", 0.0, 0.15)
+		t_cierre.tween_callback(func(): capa.queue_free())
+	)
 
 func _process(delta: float) -> void:
 	if not fondo:
@@ -117,7 +182,10 @@ func _mostrar_intro_lugar() -> void:
 	t.tween_property(panel, "modulate:a", 0.0, 0.25)
 	t.parallel().tween_property(panel, "scale", Vector2(0.9, 0.9), 0.25)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	t.tween_callback(func(): capa.queue_free())
+	t.tween_callback(func():
+		capa.queue_free()
+		mostrar_notificacion("Find the 3 missing charms — they look like small red balls.")
+	)
 
 
 func _configurar_charm(charm: BaseButton, puzzle_id: String) -> void:
