@@ -6,9 +6,9 @@
 [node name="Node2D" type="Node2D" unique_id=1866602082]
 script = ExtResource("1_y3wa2")
 
-[node name="NextButtom" type="TextureButton" parent="." unique_id=755315956]
+[node name="NextButton" type="TextureButton" parent="." unique_id=755315956]
 offset_left = 1550.0
-offset_top = 950.0
+offset_top = 900.0
 offset_right = 1834.0
-offset_bottom = 1041.0
+offset_bottom = 991.0
 texture_normal = ExtResource("2_ndeqk")

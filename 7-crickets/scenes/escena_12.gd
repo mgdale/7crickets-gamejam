@@ -35,9 +35,11 @@ func _ready() -> void:
 	capa_ui.layer = 1
 	add_child(capa_ui)
 
-	var fondo := ColorRect.new()
-	fondo.color = Color(0.85, 0.92, 1.0)
+	var fondo := TextureRect.new()
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	fondo.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	fondo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	fondo.texture = load("res://images/fondo12.png")
 	capa_ui.add_child(fondo)
 
 	_crear_caja_nombre()
@@ -146,7 +148,7 @@ func _animar_indicador() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):
+	if event.is_action_pressed("ui_accept") and not event.is_echo():
 		if escribiendo:
 			if tween_texto:
 				tween_texto.kill()

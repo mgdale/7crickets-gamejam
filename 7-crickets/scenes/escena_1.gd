@@ -8,6 +8,7 @@ var dialogos := [
 
 @export var escena_siguiente: String = "res://scenes/escena_2.tscn"
 @export var velocidad_letra: float = 0.03
+@export var tiempo_dormido: float = 2.5
 
 const ANCHO_PANTALLA := 1920
 
@@ -20,12 +21,16 @@ const ALTO_CAJA_NOMBRE := 80
 const ESPACIO_ENTRE_CAJAS := 0
 
 var capa_ui: CanvasLayer
+var fondo: TextureRect
+var panel_nombre: PanelContainer
+var panel_texto: PanelContainer
 var caja_texto: RichTextLabel
 var caja_nombre: Label
 var indicador: Label
 
 var indice_dialogo := 0
 var escribiendo := false
+var despierto := false
 var tween_texto: Tween
 var tween_indicador: Tween
 
@@ -35,15 +40,30 @@ func _ready() -> void:
 	capa_ui.layer = 1
 	add_child(capa_ui)
 
-	var fondo := ColorRect.new()
-	fondo.color = Color(0.85, 0.92, 1.0)
+	fondo = TextureRect.new()
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	fondo.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	fondo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	fondo.texture = load("res://images/fondo1.png")
 	capa_ui.add_child(fondo)
 
 	_crear_caja_nombre()
 	_crear_caja_texto()
 	_crear_indicador()
 
+	panel_nombre.visible = false
+	panel_texto.visible = false
+
+	await get_tree().create_timer(tiempo_dormido).timeout
+	despertar()
+
+
+func despertar() -> void:
+	despierto = true
+	fondo.texture = load("res://images/fondo1.2.png")
+
+	panel_nombre.visible = true
+	panel_texto.visible = true
 	_mostrar_dialogo(indice_dialogo)
 
 
@@ -63,6 +83,7 @@ func _crear_caja_nombre() -> void:
 	estilo.content_margin_bottom = 20
 	panel.add_theme_stylebox_override("panel", estilo)
 	capa_ui.add_child(panel)
+	panel_nombre = panel
 
 	caja_nombre = Label.new()
 	caja_nombre.add_theme_font_size_override("font_size", 28)
@@ -86,6 +107,7 @@ func _crear_caja_texto() -> void:
 	estilo.content_margin_bottom = 35
 	panel.add_theme_stylebox_override("panel", estilo)
 	capa_ui.add_child(panel)
+	panel_texto = panel
 
 	caja_texto = RichTextLabel.new()
 	caja_texto.bbcode_enabled = false
@@ -146,7 +168,9 @@ func _animar_indicador() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):
+	if not despierto:
+		return
+	if event.is_action_pressed("ui_accept") and not event.is_echo():
 		if escribiendo:
 			if tween_texto:
 				tween_texto.kill()
@@ -175,3 +199,4 @@ func _cambiar_escena(ruta: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(fade, "color:a", 1.0, 0.4)
 	tween.tween_callback(func(): get_tree().change_scene_to_file(ruta))
+	

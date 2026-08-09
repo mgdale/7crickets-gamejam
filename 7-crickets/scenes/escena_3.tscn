@@ -8,7 +8,7 @@ script = ExtResource("1_e8wmc")
 
 [node name="NextButton" type="TextureButton" parent="." unique_id=1115928732]
 offset_left = 1550.0
-offset_top = 950.0
+offset_top = 900.0
 offset_right = 1834.0
-offset_bottom = 1041.0
+offset_bottom = 991.0
 texture_normal = ExtResource("2_xgk0e")
