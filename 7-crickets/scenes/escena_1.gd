@@ -201,7 +201,7 @@ func _crear_indicador() -> void:
 
 
 func _mostrar_dialogo(indice: int) -> void:
-	var d: Dictionary = dialogos[indice]
+  	var d: Dictionary = dialogos[indice]
 	caja_nombre.text = d["Name"]
 	caja_texto.text = d["text"]
 	caja_texto.visible_characters = 0
