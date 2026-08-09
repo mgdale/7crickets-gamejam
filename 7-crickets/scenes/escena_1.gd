@@ -8,7 +8,7 @@ var dialogos := [
 
 @export var escena_siguiente: String = "res://scenes/escena_2.tscn"
 @export var velocidad_letra: float = 0.03
-@export var tiempo_dormido: float = 2.5
+@export var tiempo_dormido: float = 0.5
 
 const ANCHO_PANTALLA := 1920
 
@@ -60,12 +60,80 @@ func _ready() -> void:
 
 func despertar() -> void:
 	despierto = true
-	fondo.texture = load("res://images/fondo1.2.png")
+	_transicion_nacimiento()
 
-	panel_nombre.visible = true
-	panel_texto.visible = true
-	_mostrar_dialogo(indice_dialogo)
 
+func _transicion_nacimiento() -> void:
+	fondo.pivot_offset = fondo.size / 2
+
+	#Flash blanco que se pone encima de todo
+	var flash := ColorRect.new()
+	flash.color = Color(1, 1, 1, 0)
+	flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	capa_ui.add_child(flash)
+	flash.z_index = 10
+
+	var tween := create_tween()
+
+	tween.tween_property(fondo, "scale", Vector2(1.08, 1.08), 0.35)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+
+	tween.tween_callback(func():
+		fondo.texture = load("res://images/fondo1.2.png")
+		_lanzar_fuegos_artificiales()
+	)
+
+	tween.tween_property(flash, "color:a", 0.9, 0.06)
+	tween.tween_property(flash, "color:a", 0.0, 0.4)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+	tween.parallel().tween_property(fondo, "scale", Vector2(1.0, 1.0), 0.7)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+	#Shake sutil de cámara mientras suenan los "fuegos"
+	tween.parallel().tween_callback(_shake_pantalla)
+
+
+	tween.tween_callback(func():
+		flash.queue_free()
+		panel_nombre.visible = true
+		panel_texto.visible = true
+		_mostrar_dialogo(indice_dialogo)
+	)
+
+
+func _shake_pantalla() -> void:
+	var pos_original := fondo.position
+	var shake := create_tween()
+	for i in range(6):
+		var offset := Vector2(randf_range(-8, 8), randf_range(-8, 8))
+		shake.tween_property(fondo, "position", pos_original + offset, 0.04)
+	shake.tween_property(fondo, "position", pos_original, 0.05)
+
+
+func _lanzar_fuegos_artificiales() -> void:
+	var particulas := CPUParticles2D.new()
+	particulas.position = Vector2(960, 400)  #centro-arriba de la pantalla
+	particulas.emitting = true
+	particulas.one_shot = true
+	particulas.explosiveness = 0.9
+	particulas.amount = 60
+	particulas.lifetime = 1.1
+	particulas.direction = Vector2(0, -1)
+	particulas.spread = 180.0
+	particulas.gravity = Vector2(0, 250)
+	particulas.initial_velocity_min = 150.0
+	particulas.initial_velocity_max = 350.0
+	particulas.scale_amount_min = 4.0
+	particulas.scale_amount_max =10.0
+	particulas.color = Color(1.0, 0.85, 0.3)  #dorado
+	capa_ui.add_child(particulas)
+
+	#Auto-limpieza después de que terminen
+	get_tree().create_timer(particulas.lifetime + 0.3).timeout.connect(
+		func(): particulas.queue_free()
+	)
 
 func _crear_caja_nombre() -> void:
 	var panel := PanelContainer.new()
@@ -82,11 +150,13 @@ func _crear_caja_nombre() -> void:
 	estilo.content_margin_top = 20
 	estilo.content_margin_bottom = 20
 	panel.add_theme_stylebox_override("panel", estilo)
+	panel.self_modulate = Color(1, 1, 1, 0.65)
 	capa_ui.add_child(panel)
 	panel_nombre = panel
 
 	caja_nombre = Label.new()
 	caja_nombre.add_theme_font_size_override("font_size", 28)
+	caja_nombre.add_theme_color_override("font_color", Color(0.85, 0.15, 0.15))
 	caja_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caja_nombre.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	panel.add_child(caja_nombre)
@@ -107,6 +177,7 @@ func _crear_caja_texto() -> void:
 	estilo.content_margin_bottom = 35
 	panel.add_theme_stylebox_override("panel", estilo)
 	capa_ui.add_child(panel)
+	panel.self_modulate = Color(1, 1, 1, 0.65)
 	panel_texto = panel
 
 	caja_texto = RichTextLabel.new()
@@ -135,11 +206,9 @@ func _mostrar_dialogo(indice: int) -> void:
 	caja_nombre.text = d["Name"]
 	caja_texto.text = d["text"]
 	caja_texto.visible_characters = 0
-
 	indicador.visible = false
 	if tween_indicador:
 		tween_indicador.kill()
-
 	escribiendo = true
 	var total: int = String(d["text"]).length()
 	if tween_texto:
@@ -199,4 +268,3 @@ func _cambiar_escena(ruta: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(fade, "color:a", 1.0, 0.4)
 	tween.tween_callback(func(): get_tree().change_scene_to_file(ruta))
-	

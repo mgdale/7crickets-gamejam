@@ -21,6 +21,8 @@ const ESPACIO_ENTRE_CAJAS := 0
 
 var capa_ui: CanvasLayer
 var caja_texto: RichTextLabel
+var panel_nombre: PanelContainer
+var panel_texto: PanelContainer
 var caja_nombre: Label
 var indicador: Label
 
@@ -46,7 +48,6 @@ func _ready() -> void:
 
 	_mostrar_dialogo(indice_dialogo)
 
-
 func _crear_caja_nombre() -> void:
 	var panel := PanelContainer.new()
 	var x := (ANCHO_PANTALLA - ANCHO_CAJA_TEXTO) / 2
@@ -62,14 +63,16 @@ func _crear_caja_nombre() -> void:
 	estilo.content_margin_top = 20
 	estilo.content_margin_bottom = 20
 	panel.add_theme_stylebox_override("panel", estilo)
+	panel.self_modulate = Color(1, 1, 1, 0.65)  
 	capa_ui.add_child(panel)
+	panel_nombre = panel
 
 	caja_nombre = Label.new()
 	caja_nombre.add_theme_font_size_override("font_size", 28)
+	caja_nombre.add_theme_color_override("font_color", Color(0.85, 0.15, 0.15))
 	caja_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caja_nombre.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	panel.add_child(caja_nombre)
-
 
 func _crear_caja_texto() -> void:
 	var panel := PanelContainer.new()
@@ -85,6 +88,7 @@ func _crear_caja_texto() -> void:
 	estilo.content_margin_top = 35
 	estilo.content_margin_bottom = 35
 	panel.add_theme_stylebox_override("panel", estilo)
+	panel.self_modulate = Color(1, 1, 1, 0.65)  
 	capa_ui.add_child(panel)
 
 	caja_texto = RichTextLabel.new()
