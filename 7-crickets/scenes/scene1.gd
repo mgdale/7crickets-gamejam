@@ -2,11 +2,11 @@ extends Node2D
 
 # --- diálogo de esta escena ---
 var dialogos := [
-	{"nombre": "???", "texto": "..."},
-	{"nombre": "Personaje", "texto": "..."},
+	{"nombre": "Personaje", "texto": "Dialogo introductorio"},
+	{"nombre": "Personaje", "texto": "+..."},
 ]
 
-@export var escena_siguiente: String = "res://scenes/scene2.tscn"
+@export var escena_siguiente: String = "res://scenes/escena2.tscn"
 @export var velocidad_letra: float = 0.03
 
 # --- personaje ---
@@ -16,6 +16,7 @@ var despierto := false
 var capa_ui: CanvasLayer
 var caja_texto: RichTextLabel
 var caja_nombre: Label
+var panel_nombre: PanelContainer
 var indicador: Label
 
 var indice_dialogo := 0
@@ -45,7 +46,7 @@ func _ready() -> void:
 	_crear_caja_texto()
 	_crear_indicador()
 
-	caja_nombre.visible = false
+	panel_nombre.visible = false
 	caja_texto.get_parent().visible = false
 
 	await get_tree().create_timer(2.5).timeout
@@ -65,7 +66,7 @@ func despertar() -> void:
 	# placeholder: cuando haya arte, reemplazar por textura ojos abiertos
 	# personaje.texture = load("res://images/personaje_despierto.png")
 
-	caja_nombre.visible = true
+	panel_nombre.visible = true
 	caja_texto.get_parent().visible = true
 	_mostrar_dialogo(indice_dialogo)
 
@@ -85,12 +86,13 @@ func _crear_caja_nombre() -> void:
 	panel.add_theme_stylebox_override("panel", estilo)
 	capa_ui.add_child(panel)
 
+	panel_nombre = panel
+
 	caja_nombre = Label.new()
 	caja_nombre.add_theme_font_size_override("font_size", 30)
 	caja_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caja_nombre.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	panel.add_child(caja_nombre)
-
 
 func _crear_caja_texto() -> void:
 	var panel := PanelContainer.new()
