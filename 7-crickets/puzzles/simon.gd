@@ -1,5 +1,7 @@
 extends Control
 
+const ESCENA_17 := "res://scenes/escena_17.tscn"
+
 @onready var botones = [$Button1, $Button2, $Button3, $Button4, $Button5]
 
 var secuencia = []
@@ -47,7 +49,8 @@ func _on_boton_pressed(indice):
 
 	if input_jugador.size() == secuencia.size():
 		if secuencia.size() >= 5:
-			GameState.complete_current_puzzle()
+			GameState.puzzles_solved[GameState.current_puzzle] = true
+			get_tree().change_scene_to_file(ESCENA_17)
 		else:
 			ronda += 1
 			await get_tree().create_timer(0.6).timeout
@@ -59,3 +62,4 @@ func reiniciar():
 	input_jugador.clear()
 	ronda = 1
 	nueva_ronda()
+	
