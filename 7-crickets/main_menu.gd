@@ -162,8 +162,16 @@ func _on_play_pressed() -> void:
 
 
 func _on_credits_pressed() -> void:
-	main_buttons.hide()
-	credits_menu.show()
+	%mainButtons.hide()
+	%creditsMenu.show()
+	%creditsMenu.pivot_offset = %creditsMenu.size / 2.0
+	%creditsMenu.scale = Vector2(0.7, 0.7)
+	%creditsMenu.modulate.a = 0.0
+
+	var t := create_tween()
+	t.tween_property(%creditsMenu, "scale", Vector2(1.0, 1.0), 0.3)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	t.parallel().tween_property(%creditsMenu, "modulate:a", 1.0, 0.25)
 
 
 func _on_quit_pressed() -> void:
@@ -171,5 +179,11 @@ func _on_quit_pressed() -> void:
 
 
 func _on_back_pressed() -> void:
-	credits_menu.hide()
-	main_buttons.show()
+	var t := create_tween()
+	t.tween_property(%creditsMenu, "scale", Vector2(0.7, 0.7), 0.2)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	t.parallel().tween_property(%creditsMenu, "modulate:a", 0.0, 0.2)
+	t.tween_callback(func():
+		%creditsMenu.hide()
+		%mainButtons.show()
+	)
