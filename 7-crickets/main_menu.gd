@@ -4,6 +4,8 @@ extends Control
 @onready var main_buttons: Container = %mainButtons
 @onready var credits_menu: Container = %creditsMenu
 
+
+
 var capa_particulas: Node2D
 var textura_particula: Texture2D
 
@@ -145,6 +147,8 @@ func _crear_particulas_fondo() -> void:
 
 
 func _on_play_pressed() -> void:
+	MusicManager.reproducir_musica("res://music/soundtrack_suave.mp3")
+	
 	var fade := ColorRect.new()
 	fade.color = Color(0, 0, 0, 0)
 	fade.size = get_viewport_rect().size
