@@ -1,6 +1,14 @@
 [gd_scene format=3 uid="uid://bw5d6uspp1mt1"]
 
 [ext_resource type="Script" uid="uid://b41n62ulue8cm" path="res://scenes/escena_3.gd" id="1_e8wmc"]
+[ext_resource type="Texture2D" uid="uid://2jo1pq8rca7b" path="res://images/next_BOTTON.png" id="2_xgk0e"]
 
 [node name="escena 3" type="Node2D" unique_id=78374207]
 script = ExtResource("1_e8wmc")
+
+[node name="NextButton" type="TextureButton" parent="." unique_id=1115928732]
+offset_left = 1550.0
+offset_top = 950.0
+offset_right = 1834.0
+offset_bottom = 1041.0
+texture_normal = ExtResource("2_xgk0e")

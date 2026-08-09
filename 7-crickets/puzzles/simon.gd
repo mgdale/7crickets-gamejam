@@ -2,10 +2,11 @@ extends Control
 
 @onready var botones = [$Button1, $Button2, $Button3, $Button4, $Button5]
 
-var secuencia = []      # secuencia que el jugador debe repetir
-var input_jugador = []  # lo que el jugador va clickeando
-var ronda = 1            # cuántos pasos tiene la secuencia actual
-var mostrando = false    # bloquea clicks mientras se muestra la secuencia
+var secuencia = []
+var input_jugador = []
+var ronda = 1
+var mostrando = false
+
 
 func _ready():
 	for i in range(botones.size()):
@@ -15,7 +16,7 @@ func _ready():
 
 func nueva_ronda():
 	input_jugador.clear()
-	secuencia.append(randi() % botones.size())  # agrega un paso nuevo al azar
+	secuencia.append(randi() % botones.size())
 	await mostrar_secuencia()
 
 
@@ -28,9 +29,9 @@ func mostrar_secuencia():
 
 
 func parpadear(boton):
-	boton.modulate = Color.YELLOW  # resalta el botón
+	boton.modulate = Color.YELLOW
 	await get_tree().create_timer(0.4).timeout
-	boton.modulate = Color.WHITE   # vuelve a la normalidad
+	boton.modulate = Color.WHITE
 
 
 func _on_boton_pressed(indice):
@@ -41,13 +42,12 @@ func _on_boton_pressed(indice):
 	var paso_actual = input_jugador.size() - 1
 
 	if input_jugador[paso_actual] != secuencia[paso_actual]:
-		print("Has perdido")
 		reiniciar()
 		return
 
 	if input_jugador.size() == secuencia.size():
 		if secuencia.size() >= 5:
-			print("¡Ganaste, completaste el Simon!")
+			GameState.complete_current_puzzle()
 		else:
 			ronda += 1
 			await get_tree().create_timer(0.6).timeout
