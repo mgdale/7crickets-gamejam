@@ -1,12 +1,12 @@
 extends Node2D
 
 var dialogos := [
-	{"Name": "???", "text": "epic dialogue in here"},
-	{"Name": "Character", "text": "more epic dialogue"},
-	{"Name": "Character", "text": "jarona"},
+	{"Name": "???", "text": "epic"},
+	{"Name": "Character", "text": " dialogue"},
+	{"Name": "Character", "text": "here"},
 ]
 
-@export var escena_siguiente: String = "res://escena_3.tscn"
+@export var escena_siguiente: String = "res://scenes/escena_6"
 @export var velocidad_letra: float = 0.03
 
 const ANCHO_PANTALLA := 1920

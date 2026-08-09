@@ -6,7 +6,7 @@ var dialogos := [
 	{"Name": "Character", "text": "jarona"},
 ]
 
-@export var escena_siguiente: String = "res://escena_3.tscn"
+@export var escena_siguiente: String = "res://scenes/escena_3"
 @export var velocidad_letra: float = 0.03
 
 const ANCHO_PANTALLA := 1920
