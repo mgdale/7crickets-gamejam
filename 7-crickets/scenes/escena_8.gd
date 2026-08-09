@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var escena_siguiente: String = "res://scenes/escena_9.tscn"
+@export var escena_siguiente: String = "res://scenes/escena_10.tscn"
 
 var imagen_fondo: TextureRect
 
