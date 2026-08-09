@@ -6,7 +6,7 @@
 [node name="escena17" type="Node2D" unique_id=1866602082]
 script = ExtResource("1_rq678")
 
-[node name="TextureButton" type="TextureButton" parent="." unique_id=2122344993]
+[node name="BotonMenu" type="TextureButton" parent="." unique_id=2122344993]
 offset_left = 1550.0
 offset_top = 900.0
 offset_right = 1834.0
