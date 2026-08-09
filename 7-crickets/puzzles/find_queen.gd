@@ -42,6 +42,7 @@ func _ready():
 	await get_tree().create_timer(3.0).timeout
 	hide_cards()
 	await shuffle()
+	
 func _crear_titulo() -> void:
 	var panel := PanelContainer.new()
 	var estilo := StyleBoxTexture.new()

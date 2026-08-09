@@ -18,6 +18,9 @@ var pos_base_botones := Vector2.ZERO
 
 
 func _ready() -> void:
+	var titulo = $Title
+	titulo.add_theme_font_override("font", load("res://fonts/Chinese_Ruler.ttf"))
+	titulo.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	offset_left = 0
 	offset_top = 0

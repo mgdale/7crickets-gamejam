@@ -76,17 +76,3 @@ layout_mode = 2
 
 [node name="Card12" parent="GridContainer" unique_id=1163383365 instance=ExtResource("2_qusu5")]
 layout_mode = 2
-
-[node name="LoseMessage" type="Label" parent="." unique_id=1338631712]
-visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Intentalo de nuevo..."
-
-[node name="WinMessage" type="Label" parent="." unique_id=373633479]
-visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "¡Bien hecho!"

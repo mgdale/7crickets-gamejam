@@ -1,8 +1,6 @@
 extends Control
 
 @onready var grid = $GridContainer
-@onready var win_message = $WinMessage
-@onready var lose_message = $LoseMessage
 
 var cards = []
 var first_card = null
@@ -28,8 +26,6 @@ var dialogos_coneja := [
 
 
 func _ready():
-	win_message.visible = false
-	lose_message.visible = false
 	cards = grid.get_children()
 	for card in cards:
 		card.textura_dorso = load("res://images/classic.png")
@@ -225,9 +221,7 @@ func compare_cards():
 	if first_card.card_id == second_card.card_id:
 		first_card.found = true
 		second_card.found = true
-		win_message.visible = true
 		await get_tree().create_timer(1.5).timeout
-		win_message.visible = false
 		GameState.puzzles_solved[GameState.current_puzzle] = true
 		var find_queen_lista = GameState.puzzles_solved.get("find_queen", false)
 		var simon_listo = GameState.puzzles_solved.get("simon", false)
@@ -236,12 +230,9 @@ func compare_cards():
 		else:
 			get_tree().change_scene_to_file(GameState.MAP_SCENE)
 	else:
-		lose_message.visible = true
 		await get_tree().create_timer(1.5).timeout
-		lose_message.visible = false
 		await get_tree().create_timer(0.5).timeout
 		restart_game()
-
 
 func restart_game():
 	first_card = null
