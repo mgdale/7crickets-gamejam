@@ -10,47 +10,42 @@ script = ExtResource("1_5b30d")
 
 [node name="Button1" type="Button" parent="." unique_id=1757175879]
 layout_mode = 0
-offset_left = 50.0
-offset_top = 100.0
-offset_right = 58.0
-offset_bottom = 108.0
-text = "1"
+offset_left = 750.0
+offset_top = 560.0
+offset_right = 900.0
+offset_bottom = 696.0
 icon = ExtResource("2_wbfb5")
 
 [node name="Button2" type="Button" parent="." unique_id=904867399]
 layout_mode = 0
-offset_left = 200.0
-offset_top = 100.0
-offset_right = 208.0
-offset_bottom = 108.0
-text = "2"
+offset_left = 947.0
+offset_top = 560.0
+offset_right = 1097.0
+offset_bottom = 696.0
 icon = ExtResource("2_wbfb5")
 
 [node name="Button3" type="Button" parent="." unique_id=667336484]
 layout_mode = 0
-offset_left = 350.0
-offset_top = 100.0
-offset_right = 358.0
-offset_bottom = 108.0
-text = "3"
+offset_left = 655.0
+offset_top = 374.0
+offset_right = 805.0
+offset_bottom = 510.0
 icon = ExtResource("2_wbfb5")
 
 [node name="Button4" type="Button" parent="." unique_id=646532754]
 layout_mode = 0
-offset_left = 500.0
-offset_top = 100.0
-offset_right = 508.0
-offset_bottom = 108.0
-text = "4"
+offset_left = 855.0
+offset_top = 374.0
+offset_right = 1005.0
+offset_bottom = 510.0
 icon = ExtResource("2_wbfb5")
 
 [node name="Button5" type="Button" parent="." unique_id=1376315829]
 layout_mode = 0
-offset_left = 650.0
-offset_top = 100.0
-offset_right = 658.0
-offset_bottom = 108.0
-text = "5"
+offset_left = 1055.0
+offset_top = 374.0
+offset_right = 1205.0
+offset_bottom = 510.0
 icon = ExtResource("2_wbfb5")
 
 [node name="LoseMessage" type="Label" parent="." unique_id=74291301]

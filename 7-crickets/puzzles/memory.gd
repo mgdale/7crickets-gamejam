@@ -20,7 +20,7 @@ func _ready():
 	for card in cards:
 		card.pressed.connect(_on_card_pressed.bind(card))
 
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(1.2).timeout
 	hide_cards()
 
 
@@ -68,7 +68,7 @@ func compare_cards():
 		first_card.found = true
 		second_card.found = true
 		win_message.visible = true
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(1.0).timeout
 		win_message.visible = false
 		GameState.complete_current_puzzle()
 	else:
@@ -85,5 +85,5 @@ func restart_game():
 	waiting = false
 	assign_ids()
 	show_face_up()
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(1.5).timeout
 	hide_cards()

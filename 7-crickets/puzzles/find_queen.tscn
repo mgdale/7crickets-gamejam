@@ -10,24 +10,24 @@ script = ExtResource("1_beoh8")
 
 [node name="Card1" parent="." unique_id=823948239 instance=ExtResource("2_2gede")]
 layout_mode = 0
-offset_left = 100.0
-offset_top = 100.0
-offset_right = 200.0
-offset_bottom = 240.0
+offset_left = 400.0
+offset_top = 430.0
+offset_right = 700.0
+offset_bottom = 730.0
 
 [node name="Card2" parent="." unique_id=1494509012 instance=ExtResource("2_2gede")]
 layout_mode = 0
-offset_left = 250.0
-offset_top = 100.0
-offset_right = 350.0
-offset_bottom = 240.0
+offset_left = 1200.0
+offset_top = 430.0
+offset_right = 1500.0
+offset_bottom = 730.0
 
 [node name="Card3" parent="." unique_id=1694059480 instance=ExtResource("2_2gede")]
 layout_mode = 0
-offset_left = 400.0
-offset_top = 100.0
-offset_right = 500.0
-offset_bottom = 240.0
+offset_left = 800.0
+offset_top = 430.0
+offset_right = 1100.0
+offset_bottom = 730.0
 
 [node name="LoseMessage" type="Label" parent="." unique_id=357921800]
 visible = false
