@@ -135,7 +135,7 @@ func _lanzar_fuegos_artificiales() -> void:
 
 	#Auto-limpieza después de que terminen
 	get_tree().create_timer(particulas.lifetime + 0.3).timeout.connect(
-   		func(): particulas.queue_free()
+	 		func(): particulas.queue_free()
 	)
 
 func _crear_caja_nombre() -> void:
