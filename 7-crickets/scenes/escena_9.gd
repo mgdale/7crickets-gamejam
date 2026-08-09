@@ -1,7 +1,7 @@
 extends Node2D
 
 @export var escena_siguiente: String = "res://scenes/escena_10.tscn"
-@export var tiempo_antes_de_shake: float = 0.8
+@export var tiempo_antes_de_shake: float = 0.5
 
 @onready var boton_siguiente = $NextButton
 
@@ -30,6 +30,11 @@ func _ready() -> void:
 
 	await get_tree().create_timer(tiempo_antes_de_shake).timeout
 	await hacer_shake()
+
+	MusicManager.reproducir_sfx("res://music/cartoon-fail-music.mp3")
+	await get_tree().create_timer(0.6).timeout  # ajusta según dure el efecto
+	MusicManager.reproducir_musica("res://music/soundtrack_movida.mp3")
+
 	listo_para_avanzar = true
 	boton_siguiente.visible = true
 
@@ -37,20 +42,10 @@ func _ready() -> void:
 func hacer_shake() -> void:
 	var pos_original := imagen_fondo.position
 	var shake := create_tween()
-
-	var fuerza := 22.0
-	var duracion_paso := 0.025
-
-	for i in range(10):
-		var offset := Vector2(randf_range(-fuerza, fuerza), randf_range(-fuerza, fuerza))
-		shake.tween_property(imagen_fondo, "position", pos_original + offset, duracion_paso)\
-			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		fuerza *= 0.72  # cada golpe es más débil que el anterior
-		duracion_paso *= 1.05  # y ligeramente más lento, como si se fuera apagando
-
-	shake.tween_property(imagen_fondo, "position", pos_original, 0.06)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-
+	for i in range(8):
+		var offset := Vector2(randf_range(-15, 15), randf_range(-15, 15))
+		shake.tween_property(imagen_fondo, "position", pos_original + offset, 0.04)
+	shake.tween_property(imagen_fondo, "position", pos_original, 0.09)
 	await shake.finished
 
 
@@ -69,6 +64,7 @@ func _cambiar_escena(ruta: String) -> void:
 	if ya_avanzando:
 		return
 	ya_avanzando = true
+
 	var capa := CanvasLayer.new()
 	capa.layer = 100
 	add_child(capa)
@@ -79,3 +75,4 @@ func _cambiar_escena(ruta: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(fade, "color:a", 1.0, 0.4)
 	tween.tween_callback(func(): get_tree().change_scene_to_file(ruta))
+	
