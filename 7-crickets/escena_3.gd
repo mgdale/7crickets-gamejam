@@ -1,13 +1,23 @@
 extends Node2D
 
 var dialogos := [
-	{"nombre": "???", "texto": "Texto de ejemplo para la escena 3."},
-	{"nombre": "Personaje", "texto": "Aquí va el siguiente diálogo."},
-	{"nombre": "Personaje", "texto": "Y este es el último de esta escena."},
+	{"Name": "???", "text": "glue"},
+	{"Name": "Character", "text": "JA-ORANGE"},
+	{"Name": "Character", "text": "mysterious wind"},
 ]
 
-@export var escena_siguiente: String = "res://Escenas/escena4.tscn"
+@export var escena_siguiente: String = "res://escena_4.tscn"
 @export var velocidad_letra: float = 0.03
+
+const ANCHO_PANTALLA := 1920
+
+const ANCHO_CAJA_TEXTO := 1600
+const ALTO_CAJA_TEXTO := 260
+const Y_CAJA_TEXTO := 760
+
+const ANCHO_CAJA_NOMBRE := 280
+const ALTO_CAJA_NOMBRE := 80
+const ESPACIO_ENTRE_CAJAS := 0
 
 var capa_ui: CanvasLayer
 var caja_texto: RichTextLabel
@@ -26,7 +36,7 @@ func _ready() -> void:
 	add_child(capa_ui)
 
 	var fondo := ColorRect.new()
-	fondo.color = Color(0.829, 0.929, 0.989, 1.0)
+	fondo.color = Color(0.85, 0.92, 1.0)
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
 	capa_ui.add_child(fondo)
 
@@ -39,21 +49,23 @@ func _ready() -> void:
 
 func _crear_caja_nombre() -> void:
 	var panel := PanelContainer.new()
-	panel.position = Vector2(110, 700)
-	panel.custom_minimum_size = Vector2(280, 85)
-	panel.size = Vector2(280, 85)
+	var x := (ANCHO_PANTALLA - ANCHO_CAJA_TEXTO) / 2
+	var y := Y_CAJA_TEXTO - ALTO_CAJA_NOMBRE - ESPACIO_ENTRE_CAJAS
+	panel.position = Vector2(x, y)
+	panel.custom_minimum_size = Vector2(ANCHO_CAJA_NOMBRE, ALTO_CAJA_NOMBRE)
+	panel.size = Vector2(ANCHO_CAJA_NOMBRE, ALTO_CAJA_NOMBRE)
 
 	var estilo := StyleBoxTexture.new()
 	estilo.texture = load("res://images/nombre_texto.png")
 	estilo.content_margin_left = 20
 	estilo.content_margin_right = 20
-	estilo.content_margin_top = 10
-	estilo.content_margin_bottom = 10
+	estilo.content_margin_top = 20
+	estilo.content_margin_bottom = 20
 	panel.add_theme_stylebox_override("panel", estilo)
 	capa_ui.add_child(panel)
 
 	caja_nombre = Label.new()
-	caja_nombre.add_theme_font_size_override("font_size", 30)
+	caja_nombre.add_theme_font_size_override("font_size", 28)
 	caja_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caja_nombre.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	panel.add_child(caja_nombre)
@@ -61,9 +73,10 @@ func _crear_caja_nombre() -> void:
 
 func _crear_caja_texto() -> void:
 	var panel := PanelContainer.new()
-	panel.position = Vector2(110, 760)
-	panel.custom_minimum_size = Vector2(1700, 280)
-	panel.size = Vector2(1700, 280)
+	var x := (ANCHO_PANTALLA - ANCHO_CAJA_TEXTO) / 2
+	panel.position = Vector2(x, Y_CAJA_TEXTO)
+	panel.custom_minimum_size = Vector2(ANCHO_CAJA_TEXTO, ALTO_CAJA_TEXTO)
+	panel.size = Vector2(ANCHO_CAJA_TEXTO, ALTO_CAJA_TEXTO)
 
 	var estilo := StyleBoxTexture.new()
 	estilo.texture = load("res://images/caja_texto.png")
@@ -87,16 +100,18 @@ func _crear_indicador() -> void:
 	indicador = Label.new()
 	indicador.text = "▼"
 	indicador.add_theme_font_size_override("font_size", 26)
-	indicador.add_theme_color_override("font_color", Color(0.238, 0.186, 0.18, 1.0))
-	indicador.position = Vector2(1740, 990)
+	indicador.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
+	var x := (ANCHO_PANTALLA - ANCHO_CAJA_TEXTO) / 2 + ANCHO_CAJA_TEXTO - 100
+	var y := Y_CAJA_TEXTO + ALTO_CAJA_TEXTO - 80
+	indicador.position = Vector2(x, y)
 	indicador.visible = false
 	capa_ui.add_child(indicador)
 
 
 func _mostrar_dialogo(indice: int) -> void:
 	var d: Dictionary = dialogos[indice]
-	caja_nombre.text = d["nombre"]
-	caja_texto.text = d["texto"]
+	caja_nombre.text = d["Name"]
+	caja_texto.text = d["text"]
 	caja_texto.visible_characters = 0
 
 	indicador.visible = false
@@ -104,7 +119,7 @@ func _mostrar_dialogo(indice: int) -> void:
 		tween_indicador.kill()
 
 	escribiendo = true
-	var total: int = String(d["texto"]).length()
+	var total: int = String(d["text"]).length()
 	if tween_texto:
 		tween_texto.kill()
 	tween_texto = create_tween()
@@ -123,11 +138,11 @@ func _texto_terminado() -> void:
 
 func _animar_indicador() -> void:
 	indicador.visible = true
-	indicador.position.y = 990
+	var pos_base := indicador.position.y
 	tween_indicador = create_tween()
 	tween_indicador.set_loops()
-	tween_indicador.tween_property(indicador, "position:y", 998, 0.4)
-	tween_indicador.tween_property(indicador, "position:y", 990, 0.4)
+	tween_indicador.tween_property(indicador, "position:y", pos_base + 8, 0.4)
+	tween_indicador.tween_property(indicador, "position:y", pos_base, 0.4)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -135,7 +150,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if escribiendo:
 			if tween_texto:
 				tween_texto.kill()
-			caja_texto.visible_characters = dialogos[indice_dialogo]["texto"].length()
+			caja_texto.visible_characters = dialogos[indice_dialogo]["text"].length()
 			_texto_terminado()
 		else:
 			_siguiente_dialogo()

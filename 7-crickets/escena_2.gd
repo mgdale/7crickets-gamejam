@@ -1,17 +1,24 @@
 extends Node2D
 
 var dialogos := [
-	{"nombre": "???", "texto": "El sol apenas empezaba a asomarse sobre la ciudad."},
-	{"nombre": "Personaje", "texto": "No pensé que terminaría aquí, de todos los lugares posibles."},
-	{"nombre": "Personaje", "texto": "Pero bueno... no hay vuelta atrás ahora."},
+	{"Name": "???", "text": "epic dialogue in here"},
+	{"Name": "Character", "text": "more epic dialogue"},
+	{"Name": "Character", "text": "jarona"},
 ]
 
-#ruta de la escena a la que se pasa cuando termina el diálogo.
-@export var escena_siguiente: String = "res://Escenas/escena3.tscn"
-
-#velocidad del tipeo 
+@export var escena_siguiente: String = "res://escena_3.tscn"
 @export var velocidad_letra: float = 0.03
-#separacion epica_______________________________________
+
+const ANCHO_PANTALLA := 1920
+
+const ANCHO_CAJA_TEXTO := 1600
+const ALTO_CAJA_TEXTO := 260
+const Y_CAJA_TEXTO := 760
+
+const ANCHO_CAJA_NOMBRE := 280
+const ALTO_CAJA_NOMBRE := 80
+const ESPACIO_ENTRE_CAJAS := 0
+
 var capa_ui: CanvasLayer
 var caja_texto: RichTextLabel
 var caja_nombre: Label
@@ -28,7 +35,6 @@ func _ready() -> void:
 	capa_ui.layer = 1
 	add_child(capa_ui)
 
-	#fondo placeholder aquí luego irá el fondoreal
 	var fondo := ColorRect.new()
 	fondo.color = Color(0.85, 0.92, 1.0)
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -43,23 +49,23 @@ func _ready() -> void:
 
 func _crear_caja_nombre() -> void:
 	var panel := PanelContainer.new()
-	panel.position = Vector2(110, 700)
-	panel.custom_minimum_size = Vector2(280, 85)
-	panel.size = Vector2(280, 85)
+	var x := (ANCHO_PANTALLA - ANCHO_CAJA_TEXTO) / 2
+	var y := Y_CAJA_TEXTO - ALTO_CAJA_NOMBRE - ESPACIO_ENTRE_CAJAS
+	panel.position = Vector2(x, y)
+	panel.custom_minimum_size = Vector2(ANCHO_CAJA_NOMBRE, ALTO_CAJA_NOMBRE)
+	panel.size = Vector2(ANCHO_CAJA_NOMBRE, ALTO_CAJA_NOMBRE)
 
 	var estilo := StyleBoxTexture.new()
 	estilo.texture = load("res://images/nombre_texto.png")
-	# Si tu imagen tiene borde/marco dibujado y el texto se ve pegado
-	# a la orilla, sube estos valores hasta que se vea centrado bien.
 	estilo.content_margin_left = 20
 	estilo.content_margin_right = 20
-	estilo.content_margin_top = 10
-	estilo.content_margin_bottom = 10
+	estilo.content_margin_top = 20
+	estilo.content_margin_bottom = 20
 	panel.add_theme_stylebox_override("panel", estilo)
 	capa_ui.add_child(panel)
 
 	caja_nombre = Label.new()
-	caja_nombre.add_theme_font_size_override("font_size", 30)
+	caja_nombre.add_theme_font_size_override("font_size", 28)
 	caja_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caja_nombre.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	panel.add_child(caja_nombre)
@@ -67,14 +73,13 @@ func _crear_caja_nombre() -> void:
 
 func _crear_caja_texto() -> void:
 	var panel := PanelContainer.new()
-	panel.position = Vector2(110, 760)
-	panel.custom_minimum_size = Vector2(1700, 280)
-	panel.size = Vector2(1700, 280)
+	var x := (ANCHO_PANTALLA - ANCHO_CAJA_TEXTO) / 2
+	panel.position = Vector2(x, Y_CAJA_TEXTO)
+	panel.custom_minimum_size = Vector2(ANCHO_CAJA_TEXTO, ALTO_CAJA_TEXTO)
+	panel.size = Vector2(ANCHO_CAJA_TEXTO, ALTO_CAJA_TEXTO)
 
-	# imagen 
 	var estilo := StyleBoxTexture.new()
 	estilo.texture = load("res://images/caja_texto.png")
-	# no quede pegado al borde dibujado la imagen
 	estilo.content_margin_left = 45
 	estilo.content_margin_right = 45
 	estilo.content_margin_top = 35
@@ -96,15 +101,17 @@ func _crear_indicador() -> void:
 	indicador.text = "▼"
 	indicador.add_theme_font_size_override("font_size", 26)
 	indicador.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
-	indicador.position = Vector2(1740, 990)
+	var x := (ANCHO_PANTALLA - ANCHO_CAJA_TEXTO) / 2 + ANCHO_CAJA_TEXTO - 100
+	var y := Y_CAJA_TEXTO + ALTO_CAJA_TEXTO - 80
+	indicador.position = Vector2(x, y)
 	indicador.visible = false
 	capa_ui.add_child(indicador)
 
 
 func _mostrar_dialogo(indice: int) -> void:
 	var d: Dictionary = dialogos[indice]
-	caja_nombre.text = d["nombre"]
-	caja_texto.text = d["texto"]
+	caja_nombre.text = d["Name"]
+	caja_texto.text = d["text"]
 	caja_texto.visible_characters = 0
 
 	indicador.visible = false
@@ -112,7 +119,7 @@ func _mostrar_dialogo(indice: int) -> void:
 		tween_indicador.kill()
 
 	escribiendo = true
-	var total: int = String(d["texto"]).length()
+	var total: int = String(d["text"]).length()
 	if tween_texto:
 		tween_texto.kill()
 	tween_texto = create_tween()
@@ -131,20 +138,19 @@ func _texto_terminado() -> void:
 
 func _animar_indicador() -> void:
 	indicador.visible = true
-	indicador.position.y = 990
+	var pos_base := indicador.position.y
 	tween_indicador = create_tween()
 	tween_indicador.set_loops()
-	tween_indicador.tween_property(indicador, "position:y", 998, 0.4)
-	tween_indicador.tween_property(indicador, "position:y", 990, 0.4)
+	tween_indicador.tween_property(indicador, "position:y", pos_base + 8, 0.4)
+	tween_indicador.tween_property(indicador, "position:y", pos_base, 0.4)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		if escribiendo:
-		# Enter durante el tipeo completar instantáneamente
 			if tween_texto:
 				tween_texto.kill()
-			caja_texto.visible_characters = dialogos[indice_dialogo]["texto"].length()
+			caja_texto.visible_characters = dialogos[indice_dialogo]["text"].length()
 			_texto_terminado()
 		else:
 			_siguiente_dialogo()
