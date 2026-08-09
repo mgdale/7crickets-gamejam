@@ -14,28 +14,27 @@ func _ready():
 	win_message.visible = false
 	lose_message.visible = false
 	cards = grid.get_children()
+	for card in cards:
+		card.textura_dorso = load("res://images/classic.png")
 	assign_ids()
 	show_face_up()
-
 	for card in cards:
 		card.pressed.connect(_on_card_pressed.bind(card))
-
 	await get_tree().create_timer(1.2).timeout
 	hide_cards()
-
 
 func assign_ids():
 	var indices = range(cards.size())
 	indices.shuffle()
-
 	var pair_1 = indices[0]
 	var pair_2 = indices[1]
-
 	for i in range(cards.size()):
 		if i == pair_1 or i == pair_2:
 			cards[i].card_id = 1
+			cards[i].textura_frente = load("res://images/match.png")
 		else:
 			cards[i].card_id = 100 + i
+			cards[i].textura_frente = load("res://images/generic.png")
 
 
 func show_face_up():
