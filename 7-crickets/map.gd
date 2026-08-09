@@ -8,6 +8,9 @@ extends Control
 var textura_charm: Texture2D = load("res://images/charm_juegos.png")
 var textura_caja: Texture2D = load("res://images/caja_texto.png")
 var fuente_dialogo: Font = load("res://fonts/Chinese_Ruler.ttf")
+var fuente_titulo: Font = load("res://fonts/chinese rocks rg.otf")
+
+@export var nombre_lugar: String = "Jardín Imperial"
 
 var mensajes_puzzle := {
 	"find_queen": "Are you ready to find the queen?",
@@ -39,6 +42,7 @@ func _ready():
 		charms_pos_original[charm] = charm.position
 
 	update_charms()
+	_mostrar_intro_lugar()
 
 
 func _process(delta: float) -> void:
@@ -57,6 +61,63 @@ func _process(delta: float) -> void:
 		var pos_original: Vector2 = charms_pos_original[charm]
 		var objetivo_charm := pos_original - desplazamiento * fondo_intensidad
 		charm.position = charm.position.lerp(objetivo_charm, delta * fondo_suavizado)
+
+
+func _mostrar_intro_lugar() -> void:
+	if GameState.intro_mapa_mostrada:
+		return
+	GameState.intro_mapa_mostrada = true
+
+	var capa := CanvasLayer.new()
+	capa.layer = 300
+	add_child(capa)
+
+	var panel := PanelContainer.new()
+	var estilo := StyleBoxTexture.new()
+	estilo.texture = textura_caja
+	estilo.texture_margin_left = 60
+	estilo.texture_margin_right = 60
+	estilo.texture_margin_top = 30
+	estilo.texture_margin_bottom = 30
+	estilo.content_margin_left = 50
+	estilo.content_margin_right = 50
+	estilo.content_margin_top = 20
+	estilo.content_margin_bottom = 20
+	estilo.modulate_color = Color(1, 1, 1, 0.6)
+	panel.add_theme_stylebox_override("panel", estilo)
+
+	var viewport_size := get_viewport_rect().size
+	var ancho := viewport_size.x * 0.5
+	var alto := 130.0
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.offset_left = -ancho / 2.0
+	panel.offset_right = ancho / 2.0
+	panel.offset_top = -alto / 2.0
+	panel.offset_bottom = alto / 2.0
+	panel.pivot_offset = Vector2(ancho / 2.0, alto / 2.0)
+	panel.scale = Vector2(0.85, 0.85)
+	panel.modulate.a = 0
+	capa.add_child(panel)
+
+	var titulo := Label.new()
+	titulo.text = nombre_lugar
+	titulo.add_theme_font_size_override("font_size", 44)
+	titulo.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	if fuente_titulo:
+		titulo.add_theme_font_override("font", fuente_titulo)
+	panel.add_child(titulo)
+
+	var t := create_tween()
+	t.tween_property(panel, "modulate:a", 1.0, 0.2)
+	t.parallel().tween_property(panel, "scale", Vector2(1.0, 1.0), 0.2)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	t.tween_interval(0.55)
+	t.tween_property(panel, "modulate:a", 0.0, 0.25)
+	t.parallel().tween_property(panel, "scale", Vector2(0.9, 0.9), 0.25)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	t.tween_callback(func(): capa.queue_free())
 
 
 func _configurar_charm(charm: BaseButton, puzzle_id: String) -> void:
