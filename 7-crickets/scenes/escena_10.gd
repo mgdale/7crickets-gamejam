@@ -40,7 +40,7 @@ func _ready() -> void:
 	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
 	fondo.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	fondo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	fondo.texture = load("res://images/fondo10.png")
+	fondo.texture = load("res://images/pulsera_rota.png")
 	capa_ui.add_child(fondo)
 
 	_crear_caja_nombre()
