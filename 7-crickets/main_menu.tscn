@@ -20,6 +20,16 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_r8uxs")
 
+[node name="ColorRect" type="TextureRect" parent="." unique_id=4039032]
+z_index = -4096
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="Title" type="Label" parent="." unique_id=1696647111]
 layout_mode = 0
 offset_right = 1920.0
@@ -54,33 +64,12 @@ layout_mode = 2
 texture_normal = ExtResource("4_qe12f")
 texture_pressed = SubResource("ViewportTexture_glbon")
 
-[node name="creditsMenu" type="VBoxContainer" parent="CenterContainer" unique_id=1051212024]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CenterContainer/creditsMenu" unique_id=1182623639]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 100
-text = "A game by ...."
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="back" type="TextureButton" parent="CenterContainer/creditsMenu" unique_id=149688442]
+[node name="back" type="TextureButton" parent="CenterContainer" unique_id=149688442]
+visible = false
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 texture_normal = ExtResource("5_8qtwp")
-
-[node name="ColorRect" type="TextureRect" parent="." unique_id=4039032]
-z_index = -4096
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
 
 [connection signal="pressed" from="CenterContainer/mainButtons/play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_credits_pressed"]

@@ -2,7 +2,6 @@ extends Control
 
 @onready var fondo: TextureRect = TextureRect.new()
 @onready var main_buttons: Container = %mainButtons
-@onready var credits_menu: Container = %creditsMenu
 
 
 
@@ -29,14 +28,7 @@ func _ready() -> void:
 	_crear_particulas_fondo()
 
 	main_buttons.show()
-	credits_menu.hide()
 	main_buttons.add_theme_constant_override("separation", 15)
-	credits_menu.add_theme_constant_override("separation", 15)
-
-	var btn_back_credits = $CenterContainer/creditsMenu/back
-	if btn_back_credits:
-		if not btn_back_credits.is_connected("pressed", Callable(self, "_on_back_pressed")):
-			btn_back_credits.pressed.connect(_on_back_pressed)
 
 	_subir_botones()
 	_configurar_hover_botones()
@@ -64,7 +56,7 @@ func _subir_botones() -> void:
 
 
 func _configurar_hover_botones() -> void:
-	for boton_container in [main_buttons, credits_menu]:
+	for boton_container in [main_buttons]:
 		for hijo in boton_container.get_children():
 			if hijo is BaseButton:
 				_conectar_hover(hijo)
@@ -99,6 +91,10 @@ func _conectar_hover(boton: BaseButton) -> void:
 			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	)
 
+func _cerrar_popup_creditos(overlay: Control, capa: CanvasLayer) -> void:
+	var t_cierre := create_tween()
+	t_cierre.tween_property(overlay, "modulate:a", 0.0, 0.15)
+	t_cierre.tween_callback(func(): capa.queue_free())
 
 func _crear_particulas_fondo() -> void:
 	var img := Image.create(10, 10, false, Image.FORMAT_RGBA8)
@@ -162,28 +158,81 @@ func _on_play_pressed() -> void:
 
 
 func _on_credits_pressed() -> void:
-	%mainButtons.hide()
-	%creditsMenu.show()
-	%creditsMenu.pivot_offset = %creditsMenu.size / 2.0
-	%creditsMenu.scale = Vector2(0.7, 0.7)
-	%creditsMenu.modulate.a = 0.0
+	var textura_caja = load("res://images/caja_texto.png")
+	var fuente_dialogo = load("res://fonts/Chinese_Ruler.ttf")
 
-	var t := create_tween()
-	t.tween_property(%creditsMenu, "scale", Vector2(1.0, 1.0), 0.3)\
+	var capa := CanvasLayer.new()
+	capa.layer = 200
+	add_child(capa)
+
+	var overlay := ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	capa.add_child(overlay)
+
+	var t_fade := create_tween()
+	t_fade.tween_property(overlay, "color", Color(0, 0, 0, 0.5), 0.2)
+
+	var panel := PanelContainer.new()
+	var estilo := StyleBoxTexture.new()
+	estilo.texture = textura_caja
+	estilo.texture_margin_left = 60
+	estilo.texture_margin_right = 60
+	estilo.texture_margin_top = 40
+	estilo.texture_margin_bottom = 40
+	estilo.content_margin_left = 50
+	estilo.content_margin_right = 50
+	estilo.content_margin_top = 35
+	estilo.content_margin_bottom = 35
+	estilo.modulate_color = Color(1, 1, 1, 0.9)
+	panel.add_theme_stylebox_override("panel", estilo)
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.offset_left = -400
+	panel.offset_right = 400
+	panel.offset_top = -250
+	panel.offset_bottom = 250
+	panel.pivot_offset = Vector2(400, 250)
+	panel.scale = Vector2(0.7, 0.7)
+	panel.modulate.a = 0
+	overlay.add_child(panel)
+
+	var t_pop := create_tween()
+	t_pop.tween_property(panel, "scale", Vector2(1.0, 1.0), 0.25)\
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	t.parallel().tween_property(%creditsMenu, "modulate:a", 1.0, 0.25)
+	t_pop.parallel().tween_property(panel, "modulate:a", 1.0, 0.2)
 
+	var contenido := VBoxContainer.new()
+	contenido.add_theme_constant_override("separation", 20)
+	contenido.alignment = BoxContainer.ALIGNMENT_CENTER
+	panel.add_child(contenido)
+
+	var titulo := Label.new()
+	titulo.text = "Credits"
+	titulo.add_theme_font_size_override("font_size", 36)
+	titulo.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if fuente_dialogo:
+		titulo.add_theme_font_override("font", fuente_dialogo)
+	contenido.add_child(titulo)
+
+	var texto_creditos := Label.new()
+	texto_creditos.text = "Programming: \nMigdaly Badilla & Nicolle Hernández\nArt: \nCarolina Reyes & Jimena Castillo"  # ajusta el texto real
+	texto_creditos.add_theme_font_size_override("font_size", 54)
+	texto_creditos.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
+	texto_creditos.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	texto_creditos.autowrap_mode = TextServer.AUTOWRAP_WORD
+	if fuente_dialogo:
+		texto_creditos.add_theme_font_override("font", fuente_dialogo)
+	contenido.add_child(texto_creditos)
+
+	var boton_original = $CenterContainer/back
+	var boton_cerrar = boton_original.duplicate()
+	boton_cerrar.visible = true
+	contenido.add_child(boton_cerrar)
+
+	if not boton_cerrar.is_connected("pressed", Callable(self, "_cerrar_popup_creditos")):
+		boton_cerrar.pressed.connect(_cerrar_popup_creditos.bind(overlay, capa))
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
-
-
-func _on_back_pressed() -> void:
-	var t := create_tween()
-	t.tween_property(%creditsMenu, "scale", Vector2(0.7, 0.7), 0.2)\
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	t.parallel().tween_property(%creditsMenu, "modulate:a", 0.0, 0.2)
-	t.tween_callback(func():
-		%creditsMenu.hide()
-		%mainButtons.show()
-	)
