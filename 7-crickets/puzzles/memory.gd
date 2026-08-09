@@ -68,9 +68,17 @@ func compare_cards():
 		first_card.found = true
 		second_card.found = true
 		win_message.visible = true
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.5).timeout
 		win_message.visible = false
-		GameState.complete_current_puzzle()
+
+		GameState.puzzles_solved[GameState.current_puzzle] = true
+		var find_queen_lista = GameState.puzzles_solved.get("find_queen", false)
+		var simon_listo = GameState.puzzles_solved.get("simon", false)
+
+		if find_queen_lista and simon_listo:
+			get_tree().change_scene_to_file("res://scenes/escena_17.tscn")
+		else:
+			get_tree().change_scene_to_file(GameState.MAP_SCENE)
 	else:
 		lose_message.visible = true
 		await get_tree().create_timer(1.5).timeout

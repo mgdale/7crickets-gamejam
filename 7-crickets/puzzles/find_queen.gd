@@ -68,7 +68,15 @@ func _on_card_pressed(card):
 		win_message.visible = true
 		await get_tree().create_timer(1.5).timeout
 		win_message.visible = false
-		GameState.complete_current_puzzle()
+
+		GameState.puzzles_solved[GameState.current_puzzle] = true
+		var memoria_lista = GameState.puzzles_solved.get("memory", false)
+		var simon_listo = GameState.puzzles_solved.get("simon", false)
+
+		if memoria_lista and simon_listo:
+			get_tree().change_scene_to_file("res://scenes/escena_17.tscn")
+		else:
+			get_tree().change_scene_to_file(GameState.MAP_SCENE)
 	else:
 		lose_message.visible = true
 		await get_tree().create_timer(1.5).timeout
