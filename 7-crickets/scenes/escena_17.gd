@@ -9,6 +9,7 @@ const ESCENA_MENU := "res://main_menu.tscn"
 @export var velocidad_letra: float = 0.03
 
 const ANCHO_PANTALLA := 1920
+const ALTO_PANTALLA := 1080
 const ANCHO_CAJA_TEXTO := 1600
 const ALTO_CAJA_TEXTO := 260
 const Y_CAJA_TEXTO := 760
@@ -19,12 +20,31 @@ const ESPACIO_ENTRE_CAJAS := 0
 @onready var boton_menu = $BotonMenu
 
 var capa_ui: CanvasLayer
+var capa_fuegos: Node2D
 var imagen_fondo: TextureRect
 var panel_nombre: PanelContainer
 var panel_texto: PanelContainer
 var caja_texto: RichTextLabel
 var caja_nombre: Label
 var indicador: Label
+
+var textura_particula: Texture2D
+var timer_fuegos: Timer
+
+var colores_fuegos := [
+	Color(1.0, 0.42, 0.62),
+	Color(0.35, 0.9, 0.82),
+	Color(1.0, 0.55, 0.15),
+	Color(1.0, 0.85, 0.25),
+	Color(0.9, 0.2, 0.25),
+]
+
+var zonas_esquinas := [
+	{"x_min": 60, "x_max": 340, "y_min": 60, "y_max": 260},
+	{"x_min": ANCHO_PANTALLA - 340, "x_max": ANCHO_PANTALLA - 60, "y_min": 60, "y_max": 260},
+	{"x_min": 60, "x_max": 340, "y_min": ALTO_PANTALLA - 460, "y_max": ALTO_PANTALLA - 260},
+	{"x_min": ANCHO_PANTALLA - 340, "x_max": ANCHO_PANTALLA - 60, "y_min": ALTO_PANTALLA - 460, "y_max": ALTO_PANTALLA - 260},
+]
 
 var indice_dialogo := 0
 var escribiendo := false
@@ -47,14 +67,17 @@ func _ready() -> void:
 	imagen_fondo.texture = load("res://images/fondo13.png")
 	capa_ui.add_child(imagen_fondo)
 
+	_crear_textura_particula()
+	_crear_capa_fuegos()
 	_crear_caja_nombre()
 	_crear_caja_texto()
 	_crear_indicador()
 
-	# el botón se agrega AL FINAL, así queda por encima de todo
 	boton_menu.get_parent().remove_child(boton_menu)
 	capa_ui.add_child(boton_menu)
 
+	_animar_fondo()
+	_iniciar_fuegos_artificiales()
 	_mostrar_dialogo(indice_dialogo)
 
 
@@ -124,6 +147,123 @@ func _crear_indicador() -> void:
 	capa_ui.add_child(indicador)
 
 
+func _animar_fondo() -> void:
+	imagen_fondo.pivot_offset = Vector2(ANCHO_PANTALLA / 2.0, ALTO_PANTALLA / 2.0)
+	imagen_fondo.scale = Vector2(1.03, 1.03)
+	imagen_fondo.position = Vector2(-10, -6)
+
+	var mov := create_tween()
+	mov.set_loops()
+	mov.tween_property(imagen_fondo, "scale", Vector2(1.06, 1.06), 4.0)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	mov.parallel().tween_property(imagen_fondo, "position", Vector2(12, 5), 4.0)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	mov.tween_property(imagen_fondo, "scale", Vector2(1.02, 1.02), 4.5)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	mov.parallel().tween_property(imagen_fondo, "position", Vector2(-10, -10), 4.5)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	mov.tween_property(imagen_fondo, "scale", Vector2(1.03, 1.03), 3.5)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	mov.parallel().tween_property(imagen_fondo, "position", Vector2(-10, -6), 3.5)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+func _crear_textura_particula() -> void:
+	var img := Image.create(12, 12, false, Image.FORMAT_RGBA8)
+	img.fill(Color(1, 1, 1, 0))
+	for y in range(12):
+		for x in range(12):
+			if Vector2(x - 5.5, y - 5.5).length() <= 5.5:
+				img.set_pixel(x, y, Color(1, 1, 1, 1))
+	textura_particula = ImageTexture.create_from_image(img)
+
+
+func _crear_capa_fuegos() -> void:
+	capa_fuegos = Node2D.new()
+	capa_ui.add_child(capa_fuegos)
+
+
+func _iniciar_fuegos_artificiales() -> void:
+	timer_fuegos = Timer.new()
+	timer_fuegos.one_shot = true
+	add_child(timer_fuegos)
+	timer_fuegos.timeout.connect(_on_timer_fuegos_timeout)
+	_on_timer_fuegos_timeout()
+
+
+func _on_timer_fuegos_timeout() -> void:
+	_lanzar_fuego_artificial()
+	timer_fuegos.wait_time = randf_range(1.2, 2.4)
+	timer_fuegos.start()
+
+
+func _lanzar_fuego_artificial() -> void:
+	var zona: Dictionary = zonas_esquinas[randi() % zonas_esquinas.size()]
+	var x := randf_range(zona["x_min"], zona["x_max"])
+	var y_destino := randf_range(zona["y_min"], zona["y_max"])
+	var color: Color = colores_fuegos[randi() % colores_fuegos.size()]
+	var duracion_subida := randf_range(0.5, 0.75)
+
+	var cohete := Sprite2D.new()
+	cohete.texture = textura_particula
+	cohete.position = Vector2(x + randf_range(-10, 10), ALTO_PANTALLA + 20)
+	cohete.scale = Vector2(0.22, 0.22)
+	cohete.modulate = Color(1.0, 1.0, 0.85, 0.55)
+	capa_fuegos.add_child(cohete)
+
+	var subida := create_tween()
+	subida.tween_property(cohete, "position", Vector2(x, y_destino), duracion_subida)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	subida.parallel().tween_property(cohete, "modulate:a", 0.0, duracion_subida)\
+		.set_delay(duracion_subida * 0.6)
+	await subida.finished
+
+	cohete.queue_free()
+	_explosion(Vector2(x, y_destino), color)
+
+
+func _explosion(pos: Vector2, color: Color) -> void:
+	var particulas := CPUParticles2D.new()
+	particulas.texture = textura_particula
+	particulas.position = pos
+	particulas.amount = 36
+	particulas.lifetime = 0.9
+	particulas.one_shot = true
+	particulas.emitting = true
+	particulas.explosiveness = 1.0
+	particulas.direction = Vector2(0, -1)
+	particulas.spread = 180
+	particulas.initial_velocity_min = 60
+	particulas.initial_velocity_max = 130
+	particulas.gravity = Vector2(0, 180)
+	particulas.scale_amount_min = 0.7
+	particulas.scale_amount_max = 1.3
+	particulas.color = color
+
+	var degradado := Gradient.new()
+	degradado.offsets = PackedFloat32Array([0.0, 0.7, 1.0])
+	degradado.colors = PackedColorArray([
+		Color(color.r, color.g, color.b, 0.55),
+		Color(color.r, color.g, color.b, 0.5),
+		Color(color.r, color.g, color.b, 0.0),
+	])
+	particulas.color_ramp = degradado
+
+	capa_fuegos.add_child(particulas)
+	particulas.finished.connect(particulas.queue_free)
+
+	var destello := Sprite2D.new()
+	destello.texture = textura_particula
+	destello.position = pos
+	destello.modulate = Color(1, 1, 1, 0.4)
+	destello.scale = Vector2(0.3, 0.3)
+	capa_fuegos.add_child(destello)
+	var t := create_tween()
+	t.tween_property(destello, "scale", Vector2(1.8, 1.8), 0.2)
+	t.parallel().tween_property(destello, "modulate:a", 0.0, 0.2)
+	t.tween_callback(destello.queue_free)
+
+
 func _mostrar_dialogo(indice: int) -> void:
 	var d: Dictionary = dialogos[indice]
 	caja_nombre.text = d["Name"]
@@ -181,4 +321,3 @@ func _siguiente_dialogo() -> void:
 		boton_menu.visible = true
 		return
 	_mostrar_dialogo(indice_dialogo)
-	
