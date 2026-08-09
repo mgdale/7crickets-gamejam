@@ -5,6 +5,7 @@ var dialogos := [
 	{"Name": "Narrator", "text": "It's you, little one!"},
 ]
 
+
 @export var escena_siguiente: String = "res://scenes/escena_2.tscn"
 @export var velocidad_letra: float = 0.03
 @export var tiempo_dormido: float = 0.5
@@ -18,6 +19,9 @@ const Y_CAJA_TEXTO := 840
 const ANCHO_CAJA_NOMBRE := 240
 const ALTO_CAJA_NOMBRE := 64
 const ESPACIO_ENTRE_CAJAS := 0
+
+var fuente_nombre: FontFile = load("res://fonts/chinese rocks rg.otf")
+var fuente_texto: FontFile = load("res://fonts/Chinese_Ruler.ttf")
 
 var capa_ui: CanvasLayer
 var fondo: TextureRect
@@ -158,6 +162,7 @@ func _crear_caja_nombre() -> void:
 	panel_nombre = panel
 
 	caja_nombre = Label.new()
+	caja_nombre.add_theme_font_override("font", fuente_nombre)
 	caja_nombre.add_theme_font_size_override("font_size", 32)
 	caja_nombre.add_theme_color_override("font_color", Color(0.85, 0.15, 0.15))
 	caja_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -191,6 +196,7 @@ func _crear_caja_texto() -> void:
 	caja_texto.bbcode_enabled = false
 	caja_texto.scroll_active = false
 	caja_texto.fit_content = true
+	caja_texto.add_theme_font_override("normal_font", fuente_texto)
 	caja_texto.add_theme_font_size_override("normal_font_size", 36)
 	caja_texto.add_theme_color_override("default_color", Color(0.1, 0.1, 0.1))
 	panel.add_child(caja_texto)
