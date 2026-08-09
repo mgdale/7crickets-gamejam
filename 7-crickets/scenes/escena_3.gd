@@ -1,7 +1,7 @@
 extends Node2D
 
 var dialogos := [
-	{"Name": "???", "text": "most"},
+	{"Name": "ardilla", "text": "most"},
 	{"Name": "Character", "text": " epic"},
 	{"Name": "Character", "text": "dialogue"},
 ]
