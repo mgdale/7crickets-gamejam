@@ -31,7 +31,7 @@ func mostrar_secuencia():
 
 
 func parpadear(boton):
-	boton.modulate = Color.YELLOW
+	boton.modulate = Color.PALE_GREEN
 	await get_tree().create_timer(0.4).timeout
 	boton.modulate = Color.WHITE
 

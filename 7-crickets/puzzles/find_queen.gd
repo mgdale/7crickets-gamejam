@@ -11,27 +11,25 @@ func _ready():
 	win_message.visible = false
 	lose_message.visible = false
 	cards = get_children().filter(func(n): return n.has_method("flip"))
-
 	for card in cards:
+		card.textura_dorso = load("res://images/sobre_queen.png")
 		positions.append(card.position)
-
 	assign_queen()
 	show_face_up()
-
 	for card in cards:
 		card.pressed.connect(_on_card_pressed.bind(card))
-
 	await get_tree().create_timer(3.0).timeout
 	hide_cards()
 	await shuffle()
 
-
 func assign_queen():
 	cards.shuffle()
 	cards[0].card_id = queen_id
+	cards[0].textura_frente = load("res://images/queen.png")
 	cards[1].card_id = 101
+	cards[1].textura_frente = load("res://images/carta_vacia.png")
 	cards[2].card_id = 102
-
+	cards[2].textura_frente = load("res://images/carta_vacia.png")
 
 func show_face_up():
 	for card in cards:
