@@ -22,9 +22,19 @@ func _ready() -> void:
 	imagen_fondo.texture = load("res://images/fondo7.png")
 	capa_ui.add_child(imagen_fondo)
 
-	#boton sobre el fondo
+	# pulsera sobre el fondo
+	var pulsera := TextureRect.new()
+	pulsera.texture = load("res://images/pulsera_transparente.png")
+	pulsera.position = Vector2(650, 550)  # ajusta posición
+	pulsera.custom_minimum_size = Vector2(500, 500)  # ajusta tamaño
+	pulsera.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	pulsera.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	capa_ui.add_child(pulsera)
+
+	# boton sobre el fondo
 	boton_siguiente.get_parent().remove_child(boton_siguiente)
 	capa_ui.add_child(boton_siguiente)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") and not event.is_echo():
@@ -46,4 +56,3 @@ func _cambiar_escena(ruta: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(fade, "color:a", 1.0, 0.4)
 	tween.tween_callback(func(): get_tree().change_scene_to_file(ruta))
-	
