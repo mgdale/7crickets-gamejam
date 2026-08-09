@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bbe5ye7tlrkvb"]
 
 [ext_resource type="Script" uid="uid://cvt1o618ni642" path="res://puzzles/memory.gd" id="1_oxqmb"]
+[ext_resource type="Texture2D" uid="uid://2i7m01kb4c7h" path="res://images/menubg.png" id="2_4b23p"]
 [ext_resource type="PackedScene" uid="uid://u074h4jhed5q" path="res://puzzles/card.tscn" id="2_qusu5"]
 
 [node name="Memory" type="Control" unique_id=1698899211]
@@ -16,6 +17,14 @@ offset_bottom = -230.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_oxqmb")
+
+[node name="MemFondo" type="TextureRect" parent="." unique_id=773178171]
+layout_mode = 0
+offset_left = -737.0
+offset_top = -310.0
+offset_right = 1183.0
+offset_bottom = 770.0
+texture = ExtResource("2_4b23p")
 
 [node name="GridContainer" type="GridContainer" parent="." unique_id=610277297]
 layout_mode = 0
