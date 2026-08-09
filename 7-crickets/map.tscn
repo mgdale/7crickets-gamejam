@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://fhefo2rvfufh"]
 
 [ext_resource type="Script" uid="uid://cke27gm1h6cng" path="res://map.gd" id="1_c7s6e"]
+[ext_resource type="Texture2D" uid="uid://cciivi2cfljft" path="res://images/ilustracion_mapa.jpg" id="2_wijl4"]
 
 [node name="Map" type="Control" unique_id=1699404460]
 layout_mode = 3
@@ -9,31 +10,32 @@ script = ExtResource("1_c7s6e")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1878873967]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("2_wijl4")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="CharmMemory" type="Button" parent="." unique_id=747972779]
 layout_mode = 0
-offset_left = 810.0
-offset_top = 300.0
-offset_right = 883.0
-offset_bottom = 331.0
+offset_left = 995.0
+offset_top = 510.0
+offset_right = 1068.0
+offset_bottom = 541.0
 text = "Memory"
 
 [node name="CharmFindQueen" type="Button" parent="." unique_id=395704367]
 layout_mode = 0
-offset_left = 365.0
-offset_top = 778.0
-offset_right = 458.0
-offset_bottom = 809.0
+offset_left = 75.0
+offset_top = 650.0
+offset_right = 168.0
+offset_bottom = 681.0
 text = "FindQueen"
 
 [node name="CharmSimon" type="Button" parent="." unique_id=1949370542]
 layout_mode = 0
-offset_left = 1601.0
-offset_top = 819.0
-offset_right = 1692.0
-offset_bottom = 850.0
+offset_left = 1626.0
+offset_top = 659.0
+offset_right = 1717.0
+offset_bottom = 690.0
 text = "SimonSays"

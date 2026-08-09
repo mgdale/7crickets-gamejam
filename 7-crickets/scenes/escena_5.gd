@@ -19,7 +19,7 @@ func _ready() -> void:
 	imagen_fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
 	imagen_fondo.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	imagen_fondo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	#imagen_fondo.texture = load("res://images/fondo3.png")
+	imagen_fondo.texture = load("res://images/pulsera_original.png")
 	capa_ui.add_child(imagen_fondo)
 	
 	#boton sobre el fondo
