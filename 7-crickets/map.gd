@@ -10,7 +10,7 @@ var textura_caja: Texture2D = load("res://images/caja_texto.png")
 var fuente_dialogo: Font = load("res://fonts/Chinese_Ruler.ttf")
 var fuente_titulo: Font = load("res://fonts/chinese rocks rg.otf")
 
-@export var nombre_lugar: String = "Jardín Imperial"
+@export var nombre_lugar: String = "Fortune Valley"
 
 var mensajes_puzzle := {
 	"find_queen": "Are you ready to find the queen?",
