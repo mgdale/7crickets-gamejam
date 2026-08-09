@@ -35,7 +35,6 @@ func parpadear(boton):
 	await get_tree().create_timer(0.4).timeout
 	boton.modulate = Color.WHITE
 
-
 func _on_boton_pressed(indice):
 	if mostrando:
 		return
@@ -50,15 +49,22 @@ func _on_boton_pressed(indice):
 	if input_jugador.size() == secuencia.size():
 		if secuencia.size() >= 5:
 			GameState.puzzles_solved[GameState.current_puzzle] = true
-			get_tree().change_scene_to_file(ESCENA_17)
+
+			var memoria_lista = GameState.puzzles_solved.get("memory", false)
+			var find_queen_lista = GameState.puzzles_solved.get("find_queen", false)
+
+			if memoria_lista and find_queen_lista:
+				get_tree().change_scene_to_file(ESCENA_17)
+			else:
+				get_tree().change_scene_to_file(GameState.MAP_SCENE)
 		else:
 			ronda += 1
 			await get_tree().create_timer(0.6).timeout
 			nueva_ronda()
+
 
 func reiniciar():
 	secuencia.clear()
 	input_jugador.clear()
 	ronda = 1
 	nueva_ronda()
-	
