@@ -43,6 +43,15 @@ func _ready() -> void:
 	fondo.texture = load("res://images/fondo6.png")
 	capa_ui.add_child(fondo)
 
+	# pulsera sobre el fondo
+	var pulsera := TextureRect.new()
+	pulsera.texture = load("res://images/pulsera_transparente.png")
+	pulsera.position = Vector2(760, 300)  # ajusta posición
+	pulsera.custom_minimum_size = Vector2(500, 500)  # ajusta tamaño
+	pulsera.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	pulsera.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	capa_ui.add_child(pulsera)
+
 	_crear_caja_nombre()
 	_crear_caja_texto()
 	_crear_indicador()
@@ -65,7 +74,7 @@ func _crear_caja_nombre() -> void:
 	estilo.content_margin_top = 20
 	estilo.content_margin_bottom = 20
 	panel.add_theme_stylebox_override("panel", estilo)
-	panel.self_modulate = Color(1, 1, 1, 0.65)  
+	panel.self_modulate = Color(1, 1, 1, 0.65)
 	capa_ui.add_child(panel)
 	panel_nombre = panel
 
@@ -91,7 +100,7 @@ func _crear_caja_texto() -> void:
 	estilo.content_margin_top = 35
 	estilo.content_margin_bottom = 35
 	panel.add_theme_stylebox_override("panel", estilo)
-	panel.self_modulate = Color(1, 1, 1, 0.65)  
+	panel.self_modulate = Color(1, 1, 1, 0.65)
 	capa_ui.add_child(panel)
 
 	caja_texto = RichTextLabel.new()
@@ -182,3 +191,5 @@ func _cambiar_escena(ruta: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(fade, "color:a", 1.0, 0.4)
 	tween.tween_callback(func(): get_tree().change_scene_to_file(ruta))
+	
+	
