@@ -1,9 +1,7 @@
 extends Node2D
 
 var dialogos := [
-	{"Name": "Escena4", "text": "epic dialogue in here trust"},
-	{"Name": "Character", "text": "most epic dialogue in here"},
-	{"Name": "Character", "text": "epic"},
+	{"Name": "Horse", "text": "Little one, I'm going to entrust you with this year's fortune charms."},
 ]
 
 @export var escena_siguiente: String = "res://scenes/escena_5.tscn"
