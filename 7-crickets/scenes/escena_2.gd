@@ -27,7 +27,7 @@ var tween_texto: Tween
 var tween_indicador: Tween
 
 func _ready() -> void:
-	var capa_ui := CanvasLayer.new()
+	capa_ui = CanvasLayer.new()
 	capa_ui.layer = 1
 	add_child(capa_ui)
 
