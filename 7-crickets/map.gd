@@ -3,9 +3,11 @@ extends Control
 @onready var charm_memory = $CharmMemory
 @onready var charm_find_queen = $CharmFindQueen
 @onready var charm_simon = $CharmSimon
+@onready var fondo: Control = get_node_or_null("TextureRect")
 
 var textura_charm: Texture2D = load("res://images/charm_juegos.png")
 var textura_caja: Texture2D = load("res://images/caja_texto.png")
+var fuente_dialogo: Font = load("res://fonts/Chinese_Ruler.ttf")
 
 var mensajes_puzzle := {
 	"find_queen": "Are you ready to find the queen?",
@@ -15,13 +17,46 @@ var mensajes_puzzle := {
 
 var popup_activo: CanvasLayer = null
 
+@export var fondo_intensidad: float = 12.0
+@export var fondo_suavizado: float = 2.5
+@export var fondo_escala: float = 1.06
+
+var fondo_pos_original: Vector2
+var charms_pos_original: Dictionary = {}
+
 
 func _ready():
 	_configurar_charm(charm_memory, "memory")
 	_configurar_charm(charm_find_queen, "find_queen")
 	_configurar_charm(charm_simon, "simon")
 
+	if fondo:
+		fondo.pivot_offset = fondo.size / 2.0
+		fondo.scale = Vector2(fondo_escala, fondo_escala)
+		fondo_pos_original = fondo.position
+
+	for charm in [charm_memory, charm_find_queen, charm_simon]:
+		charms_pos_original[charm] = charm.position
+
 	update_charms()
+
+
+func _process(delta: float) -> void:
+	if not fondo:
+		return
+
+	var viewport_size := get_viewport_rect().size
+	var mouse_pos := get_viewport().get_mouse_position()
+	var centro := viewport_size / 2.0
+	var desplazamiento := (mouse_pos - centro) / centro
+
+	var objetivo_fondo := fondo_pos_original - desplazamiento * fondo_intensidad
+	fondo.position = fondo.position.lerp(objetivo_fondo, delta * fondo_suavizado)
+
+	for charm in charms_pos_original.keys():
+		var pos_original: Vector2 = charms_pos_original[charm]
+		var objetivo_charm := pos_original - desplazamiento * fondo_intensidad
+		charm.position = charm.position.lerp(objetivo_charm, delta * fondo_suavizado)
 
 
 func _configurar_charm(charm: BaseButton, puzzle_id: String) -> void:
@@ -46,16 +81,19 @@ func _configurar_charm(charm: BaseButton, puzzle_id: String) -> void:
 	charm.pivot_offset = charm.size / 2.0
 	charm.resized.connect(func(): charm.pivot_offset = charm.size / 2.0)
 
+	var escala_base := Vector2(0.78, 0.78)
+	charm.scale = escala_base
+
 	charm.mouse_entered.connect(func():
 		var t := create_tween()
-		t.tween_property(charm, "scale", Vector2(1.18, 1.18), 0.15)\
+		t.tween_property(charm, "scale", escala_base * 1.18, 0.15)\
 			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		t.parallel().tween_property(charm, "modulate", Color(1.35, 1.35, 1.1), 0.15)
 	)
 
 	charm.mouse_exited.connect(func():
 		var t := create_tween()
-		t.tween_property(charm, "scale", Vector2(1.0, 1.0), 0.15)\
+		t.tween_property(charm, "scale", escala_base, 0.15)\
 			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		t.parallel().tween_property(charm, "modulate", Color(1, 1, 1), 0.15)
 	)
@@ -102,6 +140,7 @@ func _mostrar_confirmacion(puzzle_id: String) -> void:
 	estilo.content_margin_right = 50
 	estilo.content_margin_top = 35
 	estilo.content_margin_bottom = 35
+	estilo.modulate_color = Color(1, 1, 1, 0.6)
 	panel.add_theme_stylebox_override("panel", estilo)
 	panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.offset_left = -300
@@ -129,6 +168,8 @@ func _mostrar_confirmacion(puzzle_id: String) -> void:
 	pregunta.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
 	pregunta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pregunta.autowrap_mode = TextServer.AUTOWRAP_WORD
+	if fuente_dialogo:
+		pregunta.add_theme_font_override("font", fuente_dialogo)
 	contenido.add_child(pregunta)
 
 	var fila_botones := HBoxContainer.new()
