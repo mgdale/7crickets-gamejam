@@ -2,11 +2,18 @@
 
 [ext_resource type="Script" uid="uid://cakgjikrcjdxf" path="res://puzzles/find_queen.gd" id="1_beoh8"]
 [ext_resource type="PackedScene" uid="uid://u074h4jhed5q" path="res://puzzles/card.tscn" id="2_2gede"]
+[ext_resource type="Texture2D" uid="uid://2i7m01kb4c7h" path="res://images/menubg.png" id="2_3h5pq"]
 
 [node name="FindQueen" type="Control" unique_id=1808720680]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_beoh8")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1021979105]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_3h5pq")
 
 [node name="Card1" parent="." unique_id=823948239 instance=ExtResource("2_2gede")]
 layout_mode = 0
@@ -14,7 +21,7 @@ offset_left = 400.0
 offset_top = 355.0
 offset_right = 508.0
 offset_bottom = 503.0
-scale = Vector2(3, 3)
+scale = Vector2(2, 2)
 flat = true
 
 [node name="Card2" parent="." unique_id=1494509012 instance=ExtResource("2_2gede")]
@@ -23,7 +30,7 @@ offset_left = 1200.0
 offset_top = 355.0
 offset_right = 1308.0
 offset_bottom = 503.0
-scale = Vector2(3, 3)
+scale = Vector2(2, 2)
 flat = true
 
 [node name="Card3" parent="." unique_id=1694059480 instance=ExtResource("2_2gede")]
@@ -32,7 +39,7 @@ offset_left = 800.0
 offset_top = 355.0
 offset_right = 908.0
 offset_bottom = 503.0
-scale = Vector2(3, 3)
+scale = Vector2(2, 2)
 flat = true
 
 [node name="LoseMessage" type="Label" parent="." unique_id=357921800]
