@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="7crickets"
-run/main_scene="uid://u074h4jhed5q"
+run/main_scene="uid://bxjejmvo8dr5i"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-MusicManager="*uid://20rgxjn5lhg5"
 GameState="*uid://crkyt8utsiv8l"
+MusicManager="*uid://20rgxjn5lhg5"
 
 [display]
 
