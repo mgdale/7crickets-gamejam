@@ -1,9 +1,21 @@
 extends Node2D
 
-var dialogos := [
-	{"Name": "Horse", "text": "Ahh! By accident, the charm bracelet broke!"},
-	{"Name": "Horse", "text": "Three charms flew off somewhere..."},
-]
+var dialogos_por_idioma := {
+	"en": [
+		{"Name": "Horse", "text": "Ahh! By accident, the charm bracelet broke!"},
+		{"Name": "Horse", "text": "Three charms flew off somewhere..."},
+	],
+	"es": [
+		{"Name": "Caballo", "text": "¡Ahh! ¡Por accidente, la pulsera de dijes se rompió!"},
+		{"Name": "Caballo", "text": "Tres dijes salieron volando..."},
+	],
+	"fr": [
+		{"Name": "Cheval", "text": "Ahh ! Par accident, le bracelet à breloques s'est cassé !"},
+		{"Name": "Cheval", "text": "Trois breloques se sont envolées quelque part..."},
+	],
+}
+
+var dialogos := []
 
 @export var escena_siguiente: String = "res://scenes/escena_11.tscn"
 @export var velocidad_letra: float = 0.03
@@ -35,6 +47,8 @@ var tween_indicador: Tween
 
 
 func _ready() -> void:
+	dialogos = dialogos_por_idioma[Lang.actual]
+
 	capa_ui = CanvasLayer.new()
 	capa_ui.layer = 1
 	add_child(capa_ui)
@@ -72,7 +86,7 @@ func _crear_caja_nombre() -> void:
 	estilo.content_margin_top = 12
 	estilo.content_margin_bottom = 12
 	panel.add_theme_stylebox_override("panel", estilo)
-	panel.self_modulate = Color(1, 1, 1, 0.65)  
+	panel.self_modulate = Color(1, 1, 1, 0.65)
 	capa_ui.add_child(panel)
 	panel_nombre = panel
 
@@ -103,7 +117,7 @@ func _crear_caja_texto() -> void:
 	estilo.content_margin_top = 20
 	estilo.content_margin_bottom = 20
 	panel.add_theme_stylebox_override("panel", estilo)
-	panel.self_modulate = Color(1, 1, 1, 0.65)  
+	panel.self_modulate = Color(1, 1, 1, 0.65)
 	capa_ui.add_child(panel)
 	panel_texto = panel
 
@@ -196,3 +210,4 @@ func _cambiar_escena(ruta: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(fade, "color:a", 1.0, 0.4)
 	tween.tween_callback(func(): get_tree().change_scene_to_file(ruta))
+	

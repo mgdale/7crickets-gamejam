@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://main_menu.gd" id="1_r8uxs"]
 [ext_resource type="Texture2D" uid="uid://r7psdxe5g7n0" path="res://images/PLAY_BOTTON.png" id="2_glbon"]
 [ext_resource type="Texture2D" uid="uid://bx5k4yb2pwb5u" path="res://images/credits_BOTTON.png" id="3_nlkkf"]
-[ext_resource type="Texture2D" uid="uid://byq8xqxadhauj" path="res://images/lenguage_BOTTON.jpg" id="3_qe12f"]
 [ext_resource type="Texture2D" uid="uid://bckjaqxlroq57" path="res://images/quit_BOTTON.png" id="4_qe12f"]
 [ext_resource type="Texture2D" uid="uid://bj2q3pmmb6ck8" path="res://images/back_BOTTON.png" id="5_8qtwp"]
 
@@ -33,10 +32,10 @@ mouse_filter = 2
 
 [node name="Title" type="Label" parent="." unique_id=1696647111]
 layout_mode = 0
-offset_left = -3.0
-offset_top = 155.0
-offset_right = 1917.0
-offset_bottom = 655.0
+offset_left = -6.0
+offset_top = 91.0
+offset_right = 1914.0
+offset_bottom = 591.0
 theme_override_font_sizes/font_size = 200
 text = "Zodiance"
 horizontal_alignment = 1
@@ -44,9 +43,10 @@ vertical_alignment = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1564307816]
 layout_mode = 0
-offset_top = 500.0
-offset_right = 1920.0
-offset_bottom = 1080.0
+offset_left = -4.0
+offset_top = 444.0
+offset_right = 1916.0
+offset_bottom = 1079.0
 theme = SubResource("Theme_gify6")
 
 [node name="mainButtons" type="VBoxContainer" parent="CenterContainer" unique_id=1127752281]
@@ -57,11 +57,6 @@ theme_override_constants/separation = 52
 [node name="play" type="TextureButton" parent="CenterContainer/mainButtons" unique_id=1683632637]
 layout_mode = 2
 texture_normal = ExtResource("2_glbon")
-
-[node name="lenguage" type="TextureButton" parent="CenterContainer/mainButtons" unique_id=1184407123]
-layout_mode = 2
-size_flags_vertical = 4
-texture_normal = ExtResource("3_qe12f")
 
 [node name="credits" type="TextureButton" parent="CenterContainer/mainButtons" unique_id=658695815]
 layout_mode = 2
@@ -79,8 +74,18 @@ layout_mode = 2
 size_flags_horizontal = 4
 texture_normal = ExtResource("5_8qtwp")
 
+[node name="textoIdioma" type="Button" parent="." unique_id=2102128155]
+modulate = Color(0.26666668, 0.023529412, 0.0627451, 1)
+self_modulate = Color(0.8352941, 0.023529412, 0.0627451, 1)
+layout_mode = 0
+offset_left = 915.0
+offset_top = 823.0
+offset_right = 998.0
+offset_bottom = 854.0
+text = "Lenguage"
+flat = true
+
 [connection signal="pressed" from="CenterContainer/mainButtons/play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="CenterContainer/mainButtons/lenguage" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/quit" to="." method="_on_quit_pressed"]

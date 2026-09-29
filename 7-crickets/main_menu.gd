@@ -33,8 +33,9 @@ func _ready() -> void:
 	main_buttons.show()
 	main_buttons.add_theme_constant_override("separation", 15)
 	
-	var boton_lenguage = $CenterContainer/mainButtons/lenguage
-	boton_lenguage.pressed.connect(_on_lenguage_pressed)
+	var texto_idioma = $textoIdioma	
+	texto_idioma.text = Lang.NOMBRES_IDIOMA[Lang.actual]
+	texto_idioma.pressed.connect(_on_lenguage_pressed)
 
 	_subir_botones()
 	_configurar_hover_botones()
@@ -302,6 +303,8 @@ func _on_lenguage_pressed() -> void:
 		titulo.add_theme_font_override("font", fuente_dialogo)
 	contenido.add_child(titulo)
 
+	var texto_idioma = $CenterContainer/textoIdioma
+
 	for codigo in Lang.IDIOMAS:
 		var boton := Button.new()
 		boton.text = Lang.NOMBRES_IDIOMA[codigo]
@@ -315,5 +318,6 @@ func _on_lenguage_pressed() -> void:
 
 		boton.pressed.connect(func():
 			Lang.actual = codigo
+			texto_idioma.text = Lang.NOMBRES_IDIOMA[codigo]
 			_cerrar_popup_creditos(overlay, capa)
 		)

@@ -1,14 +1,23 @@
 extends Node2D
 
-var dialogos := [
-	{"Name": "Horse", "text": "Little one, I'm going to entrust you with this year's fortune charms."},
-]
+var dialogos_por_idioma := {
+	"en": [
+		{"Name": "Horse", "text": "Little one, I'm going to entrust you with this year's fortune charms."},
+	],
+	"es": [
+		{"Name": "Caballo", "text": "Pequeño, te voy a confiar los dijes de la fortuna de este año."},
+	],
+	"fr": [
+		{"Name": "Cheval", "text": "Petit, je vais te confier les breloques de la fortune de cette année."},
+	],
+}
+
+var dialogos := []
 
 @export var escena_siguiente: String = "res://scenes/escena_5.tscn"
 @export var velocidad_letra: float = 0.03
 
 const ANCHO_PANTALLA := 1920
-
 const ANCHO_CAJA_TEXTO := 1300
 const ALTO_CAJA_TEXTO := 180
 const Y_CAJA_TEXTO := 840
@@ -34,6 +43,8 @@ var tween_indicador: Tween
 
 
 func _ready() -> void:
+	dialogos = dialogos_por_idioma[Lang.actual]
+	
 	capa_ui = CanvasLayer.new()
 	capa_ui.layer = 1
 	add_child(capa_ui)

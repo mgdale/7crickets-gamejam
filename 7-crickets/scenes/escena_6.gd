@@ -1,9 +1,19 @@
 extends Node2D
 
-var dialogos := [
-	{"Name": "Horse", "text": "They hold the power of all the zodiac signs — use them wisely."},
-	{"Name": "Horse", "text": "They are very precious."},
-]
+var dialogos_por_idioma := {
+	"en": [
+		{"Name": "Horse", "text": "They hold the power of all the zodiac signs — use them wisely."},
+		{"Name": "Horse", "text": "They are very precious."},
+	],
+	"es": [
+		{"Name": "Caballo", "text": "Contienen el poder de todos los signos zodiacales — úsalos con sabiduría."},
+		{"Name": "Caballo", "text": "Son muy preciados."},
+	],
+	"fr": [
+		{"Name": "Cheval", "text": "Elles renferment le pouvoir de tous les signes du zodiaque — utilise-les avec sagesse."},
+		{"Name": "Cheval", "text": "Elles sont très précieuses."},
+	],
+}
 
 @export var escena_siguiente: String = "res://scenes/escena_7.tscn"
 @export var velocidad_letra: float = 0.03
@@ -28,6 +38,8 @@ var panel_texto: PanelContainer
 var caja_nombre: Label
 var indicador: Label
 
+var dialogos := []
+
 var indice_dialogo := 0
 var escribiendo := false
 var tween_texto: Tween
@@ -35,6 +47,8 @@ var tween_indicador: Tween
 
 
 func _ready() -> void:
+	dialogos = dialogos_por_idioma[Lang.actual]
+	
 	capa_ui = CanvasLayer.new()
 	capa_ui.layer = 1
 	add_child(capa_ui)

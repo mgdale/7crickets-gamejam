@@ -1,9 +1,19 @@
 extends Node2D
 
-var dialogos := [
-	{"Name": "Horse", "text": "You did it!"},
-	{"Name": "Horse", "text": "We are going to have a prosperous new year thanks to you."},
-]
+var dialogos_por_idioma := {
+	"en": [
+		{"Name": "Horse", "text": "You did it!"},
+		{"Name": "Horse", "text": "We are going to have a prosperous new year thanks to you."},
+	],
+	"es": [
+		{"Name": "Caballo", "text": "¡Lo lograste!"},
+		{"Name": "Caballo", "text": "Vamos a tener un año nuevo próspero gracias a ti."},
+	],
+	"fr": [
+		{"Name": "Cheval", "text": "Tu as réussi !"},
+		{"Name": "Cheval", "text": "Nous allons avoir une nouvelle année prospère grâce à toi."},
+	],
+}
 
 const ESCENA_MENU := "res://main_menu.tscn"
 @export var velocidad_letra: float = 0.03
@@ -18,6 +28,8 @@ const Y_CAJA_TEXTO := 840
 const ANCHO_CAJA_NOMBRE := 240
 const ALTO_CAJA_NOMBRE := 64
 const ESPACIO_ENTRE_CAJAS := 0
+
+var dialogos := []
 
 var fuente_nombre: FontFile = load("res://fonts/chinese rocks rg.otf")
 var fuente_texto: FontFile = load("res://fonts/Chinese_Ruler.ttf")
@@ -58,6 +70,8 @@ var tween_indicador: Tween
 
 
 func _ready() -> void:
+	dialogos = dialogos_por_idioma[Lang.actual]
+	
 	boton_menu.pressed.connect(func(): get_tree().change_scene_to_file(ESCENA_MENU))
 	boton_menu.visible = false
 

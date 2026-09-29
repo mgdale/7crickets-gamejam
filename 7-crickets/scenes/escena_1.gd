@@ -1,10 +1,19 @@
 extends Node2D
 
-var dialogos := [
-	{"Name": "Narrator", "text": "Congratulations! The zodiac spirit for this new year has been chosen."},
-	{"Name": "Narrator", "text": "It's you, little one!"},
-]
-
+var dialogos_por_idioma := {
+	"en": [
+		{"Name": "Narrator", "text": "Congratulations! The zodiac spirit for this new year has been chosen."},
+		{"Name": "Narrator", "text": "It's you, little one!"},
+	],
+	"es": [
+		{"Name": "Narrador", "text": "¡Felicidades! El espíritu zodiacal de este nuevo año ha sido elegido."},
+		{"Name": "Narrador", "text": "¡Eres tú, pequeño!"},
+	],
+	"fr": [
+		{"Name": "Narrateur", "text": "Félicitations ! L'esprit du zodiaque de cette nouvelle année a été choisi."},
+		{"Name": "Narrateur", "text": "C'est toi, petit !"},
+	],
+}
 
 @export var escena_siguiente: String = "res://scenes/escena_2.tscn"
 @export var velocidad_letra: float = 0.03
@@ -19,6 +28,8 @@ const Y_CAJA_TEXTO := 840
 const ANCHO_CAJA_NOMBRE := 240
 const ALTO_CAJA_NOMBRE := 64
 const ESPACIO_ENTRE_CAJAS := 0
+
+var dialogos := []
 
 var fuente_nombre: FontFile = load("res://fonts/chinese rocks rg.otf")
 var fuente_texto: FontFile = load("res://fonts/Chinese_Ruler.ttf")
@@ -39,6 +50,8 @@ var tween_indicador: Tween
 
 
 func _ready() -> void:
+	dialogos = dialogos_por_idioma[Lang.actual]
+
 	capa_ui = CanvasLayer.new()
 	capa_ui.layer = 1
 	add_child(capa_ui)
@@ -69,7 +82,6 @@ func despertar() -> void:
 func _transicion_nacimiento() -> void:
 	fondo.pivot_offset = fondo.size / 2
 
-	#Flash blanco que se pone encima de todo
 	var flash := ColorRect.new()
 	flash.color = Color(1, 1, 1, 0)
 	flash.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -94,9 +106,7 @@ func _transicion_nacimiento() -> void:
 	tween.parallel().tween_property(fondo, "scale", Vector2(1.0, 1.0), 0.7)\
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
-	#Shake sutil de cámara mientras suenan los "fuegos"
 	tween.parallel().tween_callback(_shake_pantalla)
-
 
 	tween.tween_callback(func():
 		flash.queue_free()
@@ -117,7 +127,7 @@ func _shake_pantalla() -> void:
 
 func _lanzar_fuegos_artificiales() -> void:
 	var particulas := CPUParticles2D.new()
-	particulas.position = Vector2(960, 400)  #centro-arriba de la pantalla
+	particulas.position = Vector2(960, 400)
 	particulas.emitting = true
 	particulas.one_shot = true
 	particulas.explosiveness = 0.9
@@ -129,14 +139,14 @@ func _lanzar_fuegos_artificiales() -> void:
 	particulas.initial_velocity_min = 150.0
 	particulas.initial_velocity_max = 350.0
 	particulas.scale_amount_min = 4.0
-	particulas.scale_amount_max =10.0
-	particulas.color = Color(1.0, 0.85, 0.3)  #dorado
+	particulas.scale_amount_max = 10.0
+	particulas.color = Color(1.0, 0.85, 0.3)
 	capa_ui.add_child(particulas)
 
-	#Auto-limpieza después de que terminen
 	get_tree().create_timer(particulas.lifetime + 0.3).timeout.connect(
-	 		func(): particulas.queue_free()
+			func(): particulas.queue_free()
 	)
+
 
 func _crear_caja_nombre() -> void:
 	var panel := PanelContainer.new()
@@ -281,3 +291,4 @@ func _cambiar_escena(ruta: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(fade, "color:a", 1.0, 0.4)
 	tween.tween_callback(func(): get_tree().change_scene_to_file(ruta))
+	

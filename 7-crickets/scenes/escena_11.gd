@@ -1,10 +1,22 @@
 extends Node2D
 
-var dialogos := [
-	{"Name": "Goat", "text": "Sorry! I was just born a couple of minutes ago..."},
-	{"Name": "Goat", "text": "I still can't stand on my hooves."},
-	{"Name": "Goat", "text": "But don't worry, we'll find the missing pieces."},
-]
+var dialogos_por_idioma := {
+	"en": [
+		{"Name": "Goat", "text": "Sorry! I was just born a couple of minutes ago..."},
+		{"Name": "Goat", "text": "I still can't stand on my hooves."},
+		{"Name": "Goat", "text": "But don't worry, we'll find the missing pieces."},
+	],
+	"es": [
+		{"Name": "Cabra", "text": "¡Perdón! Nací hace apenas un par de minutos..."},
+		{"Name": "Cabra", "text": "Todavía no puedo sostenerme en mis pezuñas."},
+		{"Name": "Cabra", "text": "Pero no te preocupes, encontraremos las piezas faltantes."},
+	],
+	"fr": [
+		{"Name": "Chèvre", "text": "Désolée ! Je suis née il y a à peine deux minutes..."},
+		{"Name": "Chèvre", "text": "Je n'arrive pas encore à tenir sur mes sabots."},
+		{"Name": "Chèvre", "text": "Mais ne t'inquiète pas, on va retrouver les pièces manquantes."},
+	],
+}
 
 @export var escena_siguiente: String = "res://scenes/escena_12.tscn"
 @export var velocidad_letra: float = 0.03
@@ -18,6 +30,8 @@ const Y_CAJA_TEXTO := 840
 const ANCHO_CAJA_NOMBRE := 240
 const ALTO_CAJA_NOMBRE := 64
 const ESPACIO_ENTRE_CAJAS := 0
+
+var dialogos := []
 
 var fuente_nombre: FontFile = load("res://fonts/chinese rocks rg.otf")
 var fuente_texto: FontFile = load("res://fonts/Chinese_Ruler.ttf")
@@ -36,6 +50,8 @@ var tween_indicador: Tween
 
 
 func _ready() -> void:
+	dialogos = dialogos_por_idioma[Lang.actual]
+	
 	capa_ui = CanvasLayer.new()
 	capa_ui.layer = 1
 	add_child(capa_ui)
