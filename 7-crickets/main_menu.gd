@@ -32,6 +32,9 @@ func _ready() -> void:
 
 	main_buttons.show()
 	main_buttons.add_theme_constant_override("separation", 15)
+	
+	var boton_lenguage = $CenterContainer/mainButtons/lenguage
+	boton_lenguage.pressed.connect(_on_lenguage_pressed)
 
 	_subir_botones()
 	_configurar_hover_botones()
@@ -239,3 +242,78 @@ func _on_credits_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
+	
+func _on_lenguage_pressed() -> void:
+	var textura_caja = load("res://images/caja_texto.png")
+	var fuente_dialogo = load("res://fonts/Chinese_Ruler.ttf")
+
+	var capa := CanvasLayer.new()
+	capa.layer = 200
+	add_child(capa)
+
+	var overlay := ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	capa.add_child(overlay)
+
+	var t_fade := create_tween()
+	t_fade.tween_property(overlay, "color", Color(0, 0, 0, 0.5), 0.2)
+
+	var panel := PanelContainer.new()
+	var estilo := StyleBoxTexture.new()
+	estilo.texture = textura_caja
+	estilo.texture_margin_left = 60
+	estilo.texture_margin_right = 60
+	estilo.texture_margin_top = 40
+	estilo.texture_margin_bottom = 40
+	estilo.content_margin_left = 50
+	estilo.content_margin_right = 50
+	estilo.content_margin_top = 35
+	estilo.content_margin_bottom = 35
+	estilo.modulate_color = Color(1, 1, 1, 0.9)
+	panel.add_theme_stylebox_override("panel", estilo)
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.offset_left = -220
+	panel.offset_right = 220
+	panel.offset_top = -180
+	panel.offset_bottom = 180
+	panel.pivot_offset = Vector2(220, 180)
+	panel.scale = Vector2(0.7, 0.7)
+	panel.modulate.a = 0
+	overlay.add_child(panel)
+
+	var t_pop := create_tween()
+	t_pop.tween_property(panel, "scale", Vector2(1.0, 1.0), 0.25)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	t_pop.parallel().tween_property(panel, "modulate:a", 1.0, 0.2)
+
+	var contenido := VBoxContainer.new()
+	contenido.add_theme_constant_override("separation", 18)
+	contenido.alignment = BoxContainer.ALIGNMENT_CENTER
+	panel.add_child(contenido)
+
+	var titulo := Label.new()
+	titulo.text = "Language"
+	titulo.add_theme_font_size_override("font_size", 32)
+	titulo.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if fuente_dialogo:
+		titulo.add_theme_font_override("font", fuente_dialogo)
+	contenido.add_child(titulo)
+
+	for codigo in Lang.IDIOMAS:
+		var boton := Button.new()
+		boton.text = Lang.NOMBRES_IDIOMA[codigo]
+		boton.custom_minimum_size = Vector2(300, 60)
+		boton.add_theme_font_size_override("font_size", 26)
+		boton.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
+		if fuente_dialogo:
+			boton.add_theme_font_override("font", fuente_dialogo)
+		boton.flat = true
+		contenido.add_child(boton)
+
+		boton.pressed.connect(func():
+			Lang.actual = codigo
+			_cerrar_popup_creditos(overlay, capa)
+		)

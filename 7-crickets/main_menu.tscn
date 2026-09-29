@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://main_menu.gd" id="1_r8uxs"]
 [ext_resource type="Texture2D" uid="uid://r7psdxe5g7n0" path="res://images/PLAY_BOTTON.png" id="2_glbon"]
 [ext_resource type="Texture2D" uid="uid://bx5k4yb2pwb5u" path="res://images/credits_BOTTON.png" id="3_nlkkf"]
+[ext_resource type="Texture2D" uid="uid://byq8xqxadhauj" path="res://images/lenguage_BOTTON.jpg" id="3_qe12f"]
 [ext_resource type="Texture2D" uid="uid://bckjaqxlroq57" path="res://images/quit_BOTTON.png" id="4_qe12f"]
 [ext_resource type="Texture2D" uid="uid://bj2q3pmmb6ck8" path="res://images/back_BOTTON.png" id="5_8qtwp"]
 
@@ -57,6 +58,11 @@ theme_override_constants/separation = 52
 layout_mode = 2
 texture_normal = ExtResource("2_glbon")
 
+[node name="lenguage" type="TextureButton" parent="CenterContainer/mainButtons" unique_id=1184407123]
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("3_qe12f")
+
 [node name="credits" type="TextureButton" parent="CenterContainer/mainButtons" unique_id=658695815]
 layout_mode = 2
 texture_normal = ExtResource("3_nlkkf")
@@ -74,6 +80,7 @@ size_flags_horizontal = 4
 texture_normal = ExtResource("5_8qtwp")
 
 [connection signal="pressed" from="CenterContainer/mainButtons/play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CenterContainer/mainButtons/lenguage" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/quit" to="." method="_on_quit_pressed"]
