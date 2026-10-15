@@ -166,7 +166,7 @@ func _on_play_pressed() -> void:
 
 func _on_credits_pressed() -> void:
 	var textura_caja = load("res://images/caja_texto.png")
-	var fuente_dialogo = load("res://fonts/Chinese_Ruler.ttf")
+	var fuente_dialogo = load("res://fonts/chinese rocks rg.otf")
 
 	var capa := CanvasLayer.new()
 	capa.layer = 200
@@ -224,8 +224,8 @@ func _on_credits_pressed() -> void:
 	contenido.add_child(titulo)
 
 	var texto_creditos := Label.new()
-	texto_creditos.text = "Programming: \nMigdaly Badilla & Nicolle Hernández\nArt: \nCarolina Reyes & Jimena Castillo"  # ajusta el texto real
-	texto_creditos.add_theme_font_size_override("font_size", 54)
+	texto_creditos.text = "Programming: \nMigdaly Badilla & Nicolle Hernández\nArt: \nCarolina Reyes, Jimena Castillo & Migdale Badilla\nMusic: \nMarko Segura"  # ajusta el texto real
+	texto_creditos.add_theme_font_size_override("font_size", 46)
 	texto_creditos.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
 	texto_creditos.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	texto_creditos.autowrap_mode = TextServer.AUTOWRAP_WORD

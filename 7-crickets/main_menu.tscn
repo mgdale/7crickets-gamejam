@@ -86,6 +86,6 @@ text = "Lenguage"
 flat = true
 
 [connection signal="pressed" from="CenterContainer/mainButtons/play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="CenterContainer/mainButtons/credits" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="CenterContainer/mainButtons/quit" to="." method="_on_quit_pressed"]
