@@ -303,7 +303,7 @@ func _on_lenguage_pressed() -> void:
 		titulo.add_theme_font_override("font", fuente_dialogo)
 	contenido.add_child(titulo)
 
-	var texto_idioma = $CenterContainer/textoIdioma
+	var texto_idioma = $textoIdioma
 
 	for codigo in Lang.IDIOMAS:
 		var boton := Button.new()

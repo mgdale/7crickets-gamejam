@@ -20,16 +20,62 @@ var fuente_dialogo: Font = load("res://fonts/Chinese_Ruler.ttf")
 @export var personaje_duracion_caminata: float = 2.2
 @export var personaje_duracion_por_texto: float = 2.4
 
-var dialogos_personaje := [
-	"Hello, young grass hopper, you look worried! That's bad for your health!",
-	"Some herbal tea and the wisdom of ancient Chinese medicine can help you.\nJust remember: you always have to apply it in the correct order"
-]
+var titulos_por_idioma := {
+	"en": "Tiger says",
+	"es": "El tigre dice",
+	"fr": "Le tigre dit",
+}
+
+var dialogos_personaje_por_idioma := {
+	"en": [
+		"Hello, young grasshopper, you look worried! That's bad for your health!",
+		"Some herbal tea and the wisdom of ancient Chinese medicine can help you.\nJust remember: you always have to apply it in the correct order.",
+	],
+	"es": [
+		"¡Hola, joven saltamontes, te ves preocupado! ¡Eso es malo para tu salud!",
+		"Un poco de té de hierbas y la sabiduría de la antigua medicina china pueden ayudarte.\nSolo recuerda: siempre debes aplicarla en el orden correcto.",
+	],
+	"fr": [
+		"Bonjour, jeune sauterelle, tu as l'air inquiet ! Ce n'est pas bon pour ta santé !",
+		"Un peu de tisane et la sagesse de l'ancienne médecine chinoise peuvent t'aider.\nSouviens-toi : il faut toujours l'appliquer dans le bon ordre.",
+	],
+}
+
+var instrucciones_por_idioma := {
+	"en": "Hello, young grasshopper, you look worried! Some herbal tea and ancient Chinese medicine can help.\n\nWatch the charms light up, then click them in the same order. Each round adds one more. Complete 5 rounds to finish!",
+	"es": "¡Hola, joven saltamontes, te ves preocupado! Un poco de té de hierbas y la antigua medicina china pueden ayudarte.\n\nObserva cómo se iluminan los dijes y luego haz clic en el mismo orden. Cada ronda agrega uno más. ¡Completa 5 rondas para terminar!",
+	"fr": "Bonjour, jeune sauterelle, tu as l'air inquiet ! Un peu de tisane et la médecine chinoise ancienne peuvent t'aider.\n\nRegarde les breloques s'illuminer, puis clique dans le même ordre. Chaque tour en ajoute une. Réussis 5 tours pour terminer !",
+}
+
+var frases_por_idioma := {
+	"en": {"seguir": "Keep going!", "reintentar": "Try again!"},
+	"es": {"seguir": "¡Sigue así!", "reintentar": "¡Inténtalo de nuevo!"},
+	"fr": {"seguir": "Continue !", "reintentar": "Réessaie !"},
+}
+
+var dialogos_personaje := []
 
 
 @export var tamano_charm: Vector2 = Vector2(150, 150)
 
 var personaje_actual: TextureRect = null
 
+func _colocar_personaje() -> void:
+	var viewport_size := get_viewport_rect().size
+	var personaje := TextureRect.new()
+	personaje.texture = textura_personaje
+	personaje.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	personaje.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	personaje.custom_minimum_size = personaje_tamano
+	personaje.size = personaje_tamano
+	personaje.modulate = Color(0.55, 0.55, 0.55, 0.55)
+	add_child(personaje)
+	move_child(personaje, 1)
+	personaje_actual = personaje
+	personaje.position = Vector2(
+		viewport_size.x - personaje_tamano.x - 40.0,
+		viewport_size.y - personaje_tamano.y - 20.0 + personaje_offset_y
+	)
 
 func _ready():
 	for i in range(botones.size()):
@@ -38,10 +84,10 @@ func _ready():
 	_fijar_tamano_charms()
 	_crear_titulo()
 	_configurar_hover_charms()
-	await _mostrar_personaje()
+	await Instrucciones.mostrar(textura_personaje, titulos_por_idioma[Lang.actual], instrucciones_por_idioma[Lang.actual])
+	_colocar_personaje()
 
 	nueva_ronda()
-
 
 func _fijar_tamano_charms() -> void:
 	# Sin importar que este causando el achicado (estado "pressed" del theme,
@@ -86,7 +132,7 @@ func _crear_titulo() -> void:
 	add_child(panel)
 
 	var titulo := Label.new()
-	titulo.text = titulo_texto
+	titulo.text = titulos_por_idioma[Lang.actual]
 	titulo.add_theme_font_size_override("font_size", 32)
 	titulo.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -351,13 +397,13 @@ func _on_boton_pressed(indice):
 				get_tree().change_scene_to_file(GameState.MAP_SCENE)
 		else:
 			ronda += 1
-			_tigre_dice("Keep going!")
+			_tigre_dice(frases_por_idioma[Lang.actual]["seguir"])
 			await get_tree().create_timer(0.6).timeout
 			nueva_ronda()
 
 
 func reiniciar():
-	_tigre_dice("Try again!")
+	_tigre_dice(frases_por_idioma[Lang.actual]["reintentar"])
 	secuencia.clear()
 	input_jugador.clear()
 	ronda = 1

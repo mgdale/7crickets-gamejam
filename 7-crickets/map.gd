@@ -12,11 +12,37 @@ var fuente_titulo: Font = load("res://fonts/chinese rocks rg.otf")
 
 @export var nombre_lugar: String = "Fortune Valley"
 
-var mensajes_puzzle := {
-	"find_queen": "Are you ready to find the queen?",
-	"memory": "Now let's test your memory!",
-	"simon": "Let's see how well you can follow directions...",
+var nombres_lugar := {
+	"en": "Fortune Valley",
+	"es": "Valle de la Fortuna",
+	"fr": "Vallée de la Fortune",
 }
+
+var mensajes_puzzle_por_idioma := {
+	"en": {
+		"find_queen": "Are you ready to find the queen?",
+		"memory": "Now let's test your memory!",
+		"simon": "Let's see how well you can follow directions...",
+	},
+	"es": {
+		"find_queen": "¿Listo para encontrar a la reina?",
+		"memory": "¡Ahora probemos tu memoria!",
+		"simon": "Veamos qué tan bien sigues instrucciones...",
+	},
+	"fr": {
+		"find_queen": "Prêt à trouver la reine ?",
+		"memory": "Testons maintenant ta mémoire !",
+		"simon": "Voyons si tu sais bien suivre les instructions...",
+	},
+}
+
+var avisos_charms := {
+	"en": "Find the 3 missing charms — they look like small red balls.",
+	"es": "Encuentra los 3 dijes perdidos — parecen pequeñas bolitas rojas.",
+	"fr": "Trouve les 3 breloques perdues — elles ressemblent à de petites boules rouges.",
+}
+
+var mensajes_puzzle := {}
 
 var popup_activo: CanvasLayer = null
 
@@ -29,6 +55,8 @@ var charms_pos_original: Dictionary = {}
 
 
 func _ready():
+	mensajes_puzzle = mensajes_puzzle_por_idioma[Lang.actual]
+	
 	_configurar_charm(charm_memory, "memory")
 	_configurar_charm(charm_find_queen, "find_queen")
 	_configurar_charm(charm_simon, "simon")
@@ -165,7 +193,7 @@ func _mostrar_intro_lugar() -> void:
 	capa.add_child(panel)
 
 	var titulo := Label.new()
-	titulo.text = nombre_lugar
+	titulo.text = nombres_lugar[Lang.actual]
 	titulo.add_theme_font_size_override("font_size", 44)
 	titulo.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -183,8 +211,7 @@ func _mostrar_intro_lugar() -> void:
 	t.parallel().tween_property(panel, "scale", Vector2(0.9, 0.9), 0.25)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	t.tween_callback(func():
-		capa.queue_free()
-		mostrar_notificacion("Find the 3 missing charms — they look like small red balls.")
+			mostrar_notificacion(avisos_charms[Lang.actual])
 	)
 
 

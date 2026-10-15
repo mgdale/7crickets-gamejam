@@ -19,27 +19,73 @@ var fuente_dialogo: Font = load("res://fonts/Chinese_Ruler.ttf")
 @export var coneja_duracion_por_texto: float = 1.8
 @export var coneja_indice_en_arbol: int = 1
 
-var dialogos_coneja := [
-	"oh! sweetie its such a shame that you have to rush so much on your first day!",
-	"but dont worry! you can make it! just like in love, you have to find your perfect match!"
-]
+var titulos_por_idioma := {
+	"en": "Find your match",
+	"es": "Tu pareja ideal",
+	"fr": "Ta paire idéale",
+}
 
+var dialogos_coneja_por_idioma := {
+	"en": [
+		"Oh! Sweetie, it's such a shame that you have to rush so much on your first day!",
+		"But don't worry! You can make it! Just like in love, you have to find your perfect match!",
+	],
+	"es": [
+		"¡Oh, cariño! ¡Qué pena que tengas que apurarte tanto en tu primer día!",
+		"¡Pero no te preocupes, tú puedes! Igual que en el amor, hay que encontrar a tu pareja perfecta.",
+	],
+	"fr": [
+		"Oh, mon cœur ! Quel dommage de devoir te dépêcher autant le premier jour !",
+		"Mais ne t'inquiète pas, tu vas y arriver ! Comme en amour, il faut trouver ta paire parfaite !",
+	],
+}
+
+var instrucciones_por_idioma := {
+	"en": "Oh, sweetie, what a shame you have to rush on your first day! But you can make it!\n\nMemorize the cards before they flip. Then find the matching pair. If you pick the wrong ones, the cards are shuffled and you try again.",
+	"es": "¡Oh, cariño, qué pena que tengas que apurarte en tu primer día! ¡Pero tú puedes!\n\nMemoriza las cartas antes de que se volteen. Luego encuentra la pareja. Si eliges mal, las cartas se revuelven y vuelves a intentarlo.",
+	"fr": "Oh, mon cœur, quel dommage de devoir te dépêcher le premier jour ! Mais tu vas y arriver !\n\nMémorise les cartes avant qu'elles ne se retournent. Puis trouve la paire. Si tu te trompes, les cartes sont mélangées et tu réessaies.",
+}
+
+var dialogos_coneja := []
+
+func _colocar_coneja() -> void:
+	var viewport_size := get_viewport_rect().size
+	var zona_libre_izq: float = grid.position.x + grid.size.x
+	var zona_libre_ancho: float = viewport_size.x - zona_libre_izq
+
+	var tamano_final := coneja_tamano
+	tamano_final.x = min(tamano_final.x, zona_libre_ancho - 40.0)
+	tamano_final.y = tamano_final.x
+
+	var coneja := TextureRect.new()
+	coneja.texture = textura_coneja
+	coneja.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	coneja.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	coneja.custom_minimum_size = tamano_final
+	coneja.size = tamano_final
+	coneja.modulate = Color(0.55, 0.55, 0.55, 0.55)
+	add_child(coneja)
+	move_child(coneja, min(coneja_indice_en_arbol, get_child_count() - 1))
+	coneja.position = Vector2(
+		zona_libre_izq + (zona_libre_ancho - tamano_final.x) / 2.0,
+		viewport_size.y - tamano_final.y - 20.0 + coneja_offset_y
+	)
 
 func _ready():
 	cards = grid.get_children()
 	for card in cards:
 		card.textura_dorso = load("res://images/classic.png")
 	assign_ids()
-	show_face_up()
 
 	_crear_titulo()
-	await _mostrar_coneja()
+	await Instrucciones.mostrar(textura_coneja, titulos_por_idioma[Lang.actual], instrucciones_por_idioma[Lang.actual])
+	_colocar_coneja()
+	show_face_up()
 
 	for card in cards:
 		card.pressed.connect(_on_card_pressed.bind(card))
 	await get_tree().create_timer(1.2).timeout
 	hide_cards()
-
 
 func _crear_titulo() -> void:
 	var panel := PanelContainer.new()
@@ -67,7 +113,7 @@ func _crear_titulo() -> void:
 	add_child(panel)
 
 	var titulo := Label.new()
-	titulo.text = titulo_texto
+	titulo.text = titulos_por_idioma[Lang.actual]
 	titulo.add_theme_font_size_override("font_size", 32)
 	titulo.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
