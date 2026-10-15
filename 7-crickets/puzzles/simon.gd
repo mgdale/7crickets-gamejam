@@ -60,6 +60,12 @@ var dialogos_personaje := []
 
 var personaje_actual: TextureRect = null
 
+func _reforzar_tamano_charms() -> void:
+	for boton in botones:
+		boton.size = tamano_charm
+		boton.scale = Vector2.ONE
+		boton.pivot_offset = tamano_charm / 2
+
 func _colocar_personaje() -> void:
 	var viewport_size := get_viewport_rect().size
 	var personaje := TextureRect.new()
@@ -80,12 +86,21 @@ func _colocar_personaje() -> void:
 func _ready():
 	for i in range(botones.size()):
 		botones[i].pressed.connect(_on_boton_pressed.bind(i))
+		botones[i].modulate.a = 0.0
 
 	_fijar_tamano_charms()
 	_crear_titulo()
 	_configurar_hover_charms()
 	await Instrucciones.mostrar(textura_personaje, titulos_por_idioma[Lang.actual], instrucciones_por_idioma[Lang.actual])
 	_colocar_personaje()
+
+	await get_tree().process_frame
+	_reforzar_tamano_charms()
+
+	var t := create_tween().set_parallel(true)
+	for boton in botones:
+		t.tween_property(boton, "modulate:a", 1.0, 0.3)
+	await t.finished
 
 	nueva_ronda()
 
@@ -319,61 +334,28 @@ func mostrar_secuencia():
 	mostrando = true
 	for paso in secuencia:
 		await parpadear(botones[paso])
-		await get_tree().create_timer(0.2).timeout
+		await get_tree().create_timer(0.3).timeout
 	mostrando = false
 
-
-func _crear_glow_charm(boton: Control) -> TextureRect:
-	var aura_size := tamano_charm * 1.7
-
-	var degradado := Gradient.new()
-	degradado.set_color(0, Color(1.0, 0.85, 0.3, 0.9))
-	degradado.set_color(1, Color(1.0, 0.85, 0.3, 0.0))
-
-	var textura_glow := GradientTexture2D.new()
-	textura_glow.gradient = degradado
-	textura_glow.fill = GradientTexture2D.FILL_RADIAL
-	textura_glow.fill_from = Vector2(0.5, 0.5)
-	textura_glow.fill_to = Vector2(1.0, 0.5)
-	textura_glow.width = int(aura_size.x)
-	textura_glow.height = int(aura_size.y)
-
-	var glow := TextureRect.new()
-	glow.texture = textura_glow
-	glow.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
-	glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	glow.modulate.a = 0.0
-	glow.z_index = boton.z_index - 1
-	glow.size = aura_size
-
-	var padre := boton.get_parent()
-	padre.add_child(glow)
-	glow.position = boton.position - (aura_size - boton.size) / 2.0
-	return glow
-
-
 func parpadear(boton):
-	var glow := _crear_glow_charm(boton)
-
 	var t_in := create_tween()
 	t_in.set_parallel(true)
-	t_in.tween_property(glow, "modulate:a", 1.0, 0.08)
-	t_in.tween_property(boton, "modulate", Color(1.35, 1.25, 0.55), 0.08)
-	t_in.tween_property(boton, "scale", Vector2(1.18, 1.18), 0.08)\
+	for otro in botones:
+		if otro != boton:
+			t_in.tween_property(otro, "modulate", Color(0.35, 0.35, 0.35), 0.1)
+	t_in.tween_property(boton, "scale", Vector2(1.3, 1.3), 0.1)\
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	await t_in.finished
 
-	await get_tree().create_timer(0.24).timeout
+	await get_tree().create_timer(0.45).timeout
 
 	var t_out := create_tween()
 	t_out.set_parallel(true)
-	t_out.tween_property(glow, "modulate:a", 0.0, 0.12)
-	t_out.tween_property(boton, "modulate", Color.WHITE, 0.12)
+	for otro in botones:
+		t_out.tween_property(otro, "modulate", Color.WHITE, 0.12)
 	t_out.tween_property(boton, "scale", Vector2(1.0, 1.0), 0.12)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	await t_out.finished
-	glow.queue_free()
-
 
 func _on_boton_pressed(indice):
 	if mostrando:

@@ -51,14 +51,14 @@ func mostrar(textura_personaje: Texture2D, titulo: String, texto: String) -> voi
 
 	# fila: personaje a la izquierda, texto a la derecha
 	var fila := HBoxContainer.new()
-	fila.add_theme_constant_override("separation", 40)
+	fila.add_theme_constant_override("separation", 20)
 	panel.add_child(fila)
 
 	var personaje := TextureRect.new()
 	personaje.texture = textura_personaje
 	personaje.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	personaje.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	personaje.custom_minimum_size = Vector2(380, 380)
+	personaje.custom_minimum_size = Vector2(560, 560)
 	personaje.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	fila.add_child(personaje)
 

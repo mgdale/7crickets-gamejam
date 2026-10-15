@@ -130,6 +130,7 @@ func mostrar_notificacion(texto: String) -> void:
 	contenido.add_child(mensaje)
 
 	var boton_ok := _crear_boton_simbolo("✓", Color(0.15, 0.55, 0.2))
+	boton_ok.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	contenido.add_child(boton_ok)
 
 	boton_ok.pressed.connect(func():
@@ -201,6 +202,9 @@ func _mostrar_intro_lugar() -> void:
 	if fuente_titulo:
 		titulo.add_theme_font_override("font", fuente_titulo)
 	panel.add_child(titulo)
+	#plus para que todos los niveles sean viables
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	titulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var t := create_tween()
 	t.tween_property(panel, "modulate:a", 1.0, 0.2)
@@ -211,7 +215,8 @@ func _mostrar_intro_lugar() -> void:
 	t.parallel().tween_property(panel, "scale", Vector2(0.9, 0.9), 0.25)\
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	t.tween_callback(func():
-			mostrar_notificacion(avisos_charms[Lang.actual])
+		capa.queue_free()
+		mostrar_notificacion(avisos_charms[Lang.actual])
 	)
 
 

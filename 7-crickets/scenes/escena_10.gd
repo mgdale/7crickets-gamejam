@@ -92,7 +92,7 @@ func _crear_caja_nombre() -> void:
 
 	caja_nombre = Label.new()
 	caja_nombre.add_theme_font_override("font", fuente_nombre)
-	caja_nombre.add_theme_font_size_override("font_size", 32)
+	caja_nombre.add_theme_font_size_override("font_size", 40)
 	caja_nombre.add_theme_color_override("font_color", Color(0.85, 0.15, 0.15))
 	caja_nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caja_nombre.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -112,7 +112,7 @@ func _crear_caja_texto() -> void:
 	estilo.texture_margin_right = 60
 	estilo.texture_margin_top = 40
 	estilo.texture_margin_bottom = 40
-	estilo.content_margin_left = 45
+	estilo.content_margin_left = 70
 	estilo.content_margin_right = 45
 	estilo.content_margin_top = 20
 	estilo.content_margin_bottom = 20
@@ -126,10 +126,9 @@ func _crear_caja_texto() -> void:
 	caja_texto.scroll_active = false
 	caja_texto.fit_content = true
 	caja_texto.add_theme_font_override("normal_font", fuente_texto)
-	caja_texto.add_theme_font_size_override("normal_font_size", 36)
+	caja_texto.add_theme_font_size_override("normal_font_size", 46)
 	caja_texto.add_theme_color_override("default_color", Color(0.1, 0.1, 0.1))
 	panel.add_child(caja_texto)
-
 
 func _crear_indicador() -> void:
 	indicador = Label.new()
@@ -140,6 +139,15 @@ func _crear_indicador() -> void:
 	var y := Y_CAJA_TEXTO + ALTO_CAJA_TEXTO - 80
 	indicador.position = Vector2(x, y)
 	indicador.visible = false
+	indicador.mouse_filter = Control.MOUSE_FILTER_STOP
+	indicador.custom_minimum_size = Vector2(70, 70)
+	indicador.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	indicador.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	indicador.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	indicador.gui_input.connect(func(event: InputEvent):
+		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			_avanzar()
+	)
 	capa_ui.add_child(indicador)
 
 
@@ -182,13 +190,17 @@ func _animar_indicador() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") and not event.is_echo():
-		if escribiendo:
-			if tween_texto:
-				tween_texto.kill()
-			caja_texto.visible_characters = dialogos[indice_dialogo]["text"].length()
-			_texto_terminado()
-		else:
-			_siguiente_dialogo()
+		_avanzar()
+
+
+func _avanzar() -> void:
+	if escribiendo:
+		if tween_texto:
+			tween_texto.kill()
+		caja_texto.visible_characters = dialogos[indice_dialogo]["text"].length()
+		_texto_terminado()
+	else:
+		_siguiente_dialogo()
 
 
 func _siguiente_dialogo() -> void:
