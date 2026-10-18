@@ -2,7 +2,9 @@
 
 [ext_resource type="Script" path="res://main_menu.gd" id="1_r8uxs"]
 [ext_resource type="Texture2D" uid="uid://r7psdxe5g7n0" path="res://images/PLAY_BOTTON.png" id="2_glbon"]
+[ext_resource type="Texture2D" uid="uid://cpamd5k20jl23" path="res://images/fondo_menu.jpeg" id="2_nlkkf"]
 [ext_resource type="Texture2D" uid="uid://bx5k4yb2pwb5u" path="res://images/credits_BOTTON.png" id="3_nlkkf"]
+[ext_resource type="Texture2D" uid="uid://bpaeogmuw2rj0" path="res://images/tt.png" id="3_qe12f"]
 [ext_resource type="Texture2D" uid="uid://bckjaqxlroq57" path="res://images/quit_BOTTON.png" id="4_qe12f"]
 [ext_resource type="Texture2D" uid="uid://bj2q3pmmb6ck8" path="res://images/back_BOTTON.png" id="5_8qtwp"]
 
@@ -20,26 +22,32 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_r8uxs")
 
-[node name="ColorRect" type="TextureRect" parent="." unique_id=4039032]
-z_index = -4096
+[node name="TextureRect" type="TextureRect" parent="." unique_id=863462847]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 1.0
+offset_bottom = 1.0
 mouse_filter = 2
+texture = ExtResource("2_nlkkf")
+expand_mode = 1
 
-[node name="Title" type="Label" parent="." unique_id=1696647111]
-layout_mode = 0
-offset_left = -6.0
-offset_top = 91.0
-offset_right = 1914.0
-offset_bottom = 591.0
-theme_override_font_sizes/font_size = 200
-text = "Zodiance"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Title" type="TextureRect" parent="." unique_id=366539958]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.192
+anchor_top = 0.17400001
+anchor_right = 0.83900005
+anchor_bottom = 0.41900003
+offset_left = -129.64001
+offset_top = -235.92001
+offset_right = 1.119873
+offset_bottom = 140.47998
+mouse_filter = 2
+texture = ExtResource("3_qe12f")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1564307816]
 layout_mode = 0

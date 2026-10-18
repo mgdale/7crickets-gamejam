@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgogxcrdd6ncn"
-path="res://.godot/imported/lenguage_btn.jpeg-f6f754d6d7cc808e2cf168a971bbb1de.ctex"
+uid="uid://cpamd5k20jl23"
+path="res://.godot/imported/fondo_menu.jpeg-283ec3caaf6b8dee3b2618d170f1fa1a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/lenguage_btn.jpeg"
-dest_files=["res://.godot/imported/lenguage_btn.jpeg-f6f754d6d7cc808e2cf168a971bbb1de.ctex"]
+source_file="res://images/fondo_menu.jpeg"
+dest_files=["res://.godot/imported/fondo_menu.jpeg-283ec3caaf6b8dee3b2618d170f1fa1a.ctex"]
 
 [params]
 
