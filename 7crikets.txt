@@ -1,0 +1,59 @@
+Dialogos
+- Español
+ESCENA1
+{"Name": "Narrator", "text": "¡Felicidades! El espíritu zodiacal de este nuevo año ha sido elegido."},
+{"Name": "Narrator", "text": "¡Eres tú, pequeño!"}
+
+ESCENA2
+{"Name": "Narrator", "text": "A partir de medianoche, estarás a cargo de la fortuna del nuevo año"},
+{"Name": "Narrator", "text": "Para eso, recibirás guía del año anterior."}
+
+ESCENA4
+{"Name": "Horse", "text": "Pequeño, te voy a confiar los dijes de la fortuna de este año."}
+
+ESCENA6
+{"Name": "Horse", "text": "Contienen el poder de todos los signos zodiacales — úsalos con sabiduría."},
+{"Name": "Horse", "text": "Son muy preciados."}
+
+ESCENA10
+{"Name": "Horse", "text": "¡Ahh! ¡La pulsera de dijes se rompió accidentalmente!"},
+{"Name": "Horse", "text": "Tres dijes se han perdido..."}
+
+ESCENA11
+{"Name": "Goat", "text": "¡Perdón! Nací hace apenas un par de minutos..."},
+{"Name": "Goat", "text": "Todavía no puedo sostenerme en mis pezuñas."},	
+{"Name": "Goat", "text": "Pero no te preocupes, encontraremos las piezas faltantes."}
+
+ESCENA12
+{"Name": "Horse", "text": "¡Date prisa! Tienes hasta medianoche para completar los dijes."},
+{"Name": "Horse", "text": "Si no lo haces, no habrá año nuevo."},
+{"Name": "Horse", "text": "El destino del año nuevo está en tus pezuñas."}
+
+ESCENA17
+{"Name": "Horse", "text": "¡Lo lograste!"},
+{"Name": "Horse", "text": "Vamos a tener un año nuevo próspero gracias a ti."}
+
+MAPA
+var mensajes_puzzle := {
+	"find_queen": "¿Listo para jugar a find the queen?",
+	"memory": "Ahora probemos memory!",
+	"simon": "Veamos que tan bien sigues instrucciones...",
+}
+
+FIND_QUEEN
+var dialogos_cerdo := [
+	"¡Oye, pequeño amigo! Será mejor que te apures",
+	"¡Todos los preparativos para el año nuevo están listos! Así que presta atención y haz el movimiento correcto"
+]
+
+MEMORY
+var dialogos_coneja := [
+	"¡Oh! Cariño, qué pena que tengas que apurarte tanto en tu primer día",
+	"¡Pero no te preocupes! ¡Tú puedes lograrlo! Igual que en el amor, tienes que encontrar tu pareja perfecta"
+]
+
+SIMON
+var dialogos_personaje := [
+	"Hola, pequeño grillo, ¡te ves preocupado! Eso es malo para tu salud",
+	"Un poco de té de hierbas y la sabiduría de la antigua medicina china puede ayudarte.\nSolo recuerda: siempre debes aplicarla en el orden correcto"
+]

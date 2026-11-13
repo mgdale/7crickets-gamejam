@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="7crickets"
-run/main_scene="uid://bxjejmvo8dr5i"
+run/main_scene="uid://bvnkekmmhfbrl"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 

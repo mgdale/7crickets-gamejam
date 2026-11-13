@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://r7psdxe5g7n0" path="res://images/PLAY_BOTTON.png" id="2_glbon"]
 [ext_resource type="Texture2D" uid="uid://cpamd5k20jl23" path="res://images/fondo_menu.jpeg" id="2_nlkkf"]
 [ext_resource type="Texture2D" uid="uid://bx5k4yb2pwb5u" path="res://images/credits_BOTTON.png" id="3_nlkkf"]
-[ext_resource type="Texture2D" uid="uid://bpaeogmuw2rj0" path="res://images/tt.png" id="3_qe12f"]
+[ext_resource type="Texture2D" path="res://images/logo/zodiance_titulo.png" id="3_qe12f"]
 [ext_resource type="Texture2D" uid="uid://bckjaqxlroq57" path="res://images/quit_BOTTON.png" id="4_qe12f"]
 [ext_resource type="Texture2D" uid="uid://bj2q3pmmb6ck8" path="res://images/back_BOTTON.png" id="5_8qtwp"]
 
@@ -34,6 +34,7 @@ texture = ExtResource("2_nlkkf")
 expand_mode = 1
 
 [node name="Title" type="TextureRect" parent="." unique_id=366539958]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.192
@@ -42,8 +43,8 @@ anchor_right = 0.83900005
 anchor_bottom = 0.41900003
 offset_left = -129.64001
 offset_top = -235.92001
-offset_right = 1.119873
-offset_bottom = 140.47998
+offset_right = 98.11987
+offset_bottom = 253.47998
 mouse_filter = 2
 texture = ExtResource("3_qe12f")
 expand_mode = 1
