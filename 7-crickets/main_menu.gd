@@ -24,6 +24,7 @@ var titulos_idioma := {
 
 
 func _ready() -> void:
+	MusicManager.reproducir_musica(MusicManager.MUSICA_MENU)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	offset_left = 0
 	offset_top = 0
@@ -92,7 +93,7 @@ func _cerrar_popup_creditos(overlay: Control, capa: CanvasLayer) -> void:
 
 
 func _on_play_pressed() -> void:
-	MusicManager.reproducir_musica("res://music/soundtrack_suave.mp3")
+	MusicManager.reproducir_musica(MusicManager.MUSICA_HISTORIA)
 	
 	var fade := ColorRect.new()
 	fade.color = Color(0, 0, 0, 0)

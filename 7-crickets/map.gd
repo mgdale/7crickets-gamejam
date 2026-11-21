@@ -55,6 +55,7 @@ var charms_pos_original: Dictionary = {}
 
 
 func _ready():
+	MusicManager.reproducir_musica(MusicManager.MUSICA_MAPA, 0.0, 4.0)
 	mensajes_puzzle = mensajes_puzzle_por_idioma[Lang.actual]
 	
 	_configurar_charm(charm_memory, "memory")

@@ -16,6 +16,7 @@ var dialogos_por_idioma := {
 }
 
 const ESCENA_MENU := "res://main_menu.tscn"
+const SONIDO_FUEGO := "res://music/Fireworks.mp3"
 @export var velocidad_letra: float = 0.03
 
 const ANCHO_PANTALLA := 1920
@@ -70,6 +71,7 @@ var tween_indicador: Tween
 
 
 func _ready() -> void:
+	MusicManager.bajar_musica(-20.0, 1.5)
 	dialogos = dialogos_por_idioma[Lang.actual]
 	
 	boton_menu.pressed.connect(func(): get_tree().change_scene_to_file(ESCENA_MENU))
@@ -261,6 +263,7 @@ func _lanzar_fuego_artificial() -> void:
 
 
 func _explosion(pos: Vector2, color: Color) -> void:
+	MusicManager.reproducir_sfx(SONIDO_FUEGO, 0.0, randf_range(0.9, 1.1))
 	var particulas := CPUParticles2D.new()
 	particulas.texture = textura_particula
 	particulas.position = pos

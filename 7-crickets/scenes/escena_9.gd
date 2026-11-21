@@ -33,7 +33,7 @@ func _ready() -> void:
 
 	MusicManager.reproducir_sfx("res://music/cartoon-fail-music.mp3")
 	await get_tree().create_timer(0.6).timeout  # ajusta según dure el efecto
-	MusicManager.reproducir_musica("res://music/soundtrack_movida.mp3")
+	MusicManager.reproducir_musica(MusicManager.MUSICA_JUEGOS)
 
 	listo_para_avanzar = true
 	boton_siguiente.visible = true

@@ -20,6 +20,7 @@ var avanzando := false
 
 
 func _ready() -> void:
+	MusicManager.reproducir_musica(MusicManager.MUSICA_MENU)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_crear_fondo()
 
@@ -38,6 +39,7 @@ func _ready() -> void:
 	await _mostrar_pantalla(RUTA_TITULO, tamano_titulo, "Zodiance")
 	if avanzando:
 		return
+		
 
 	_ir_al_menu()
 

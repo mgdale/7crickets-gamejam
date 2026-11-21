@@ -29,7 +29,7 @@ func _ready() -> void:
 	# pulsera quieta sobre el primer fondo
 	pulsera = TextureRect.new()
 	pulsera.texture = load("res://images/pulsera_transparente.png")
-	pulsera.position = Vector2(610, 660)  # ajusta según tu composición
+	pulsera.position = Vector2(610, 660) 
 	pulsera.custom_minimum_size = Vector2(500, 500)
 	pulsera.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	pulsera.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -51,6 +51,7 @@ func caer_pulsera() -> void:
 	tween.tween_property(pulsera, "position:y", pulsera.position.y + 500, 0.5)\
 		.set_trans(Tween.TRANS_LINEAR)
 	await tween.finished
+	MusicManager.reproducir_sfx("res://music/hard-glass-break-2.mp3")
 	pulsera.visible = false
 
 

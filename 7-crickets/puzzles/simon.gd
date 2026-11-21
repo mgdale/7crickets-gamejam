@@ -1,6 +1,14 @@
 extends Control
 
 const ESCENA_17 := "res://scenes/escena_17.tscn"
+const SONIDOS_CHARMS := [
+	"res://music/Simon01.wav",
+	"res://music/Simon02.wav",
+	"res://music/Simon03.wav",
+	"res://music/Simon04.wav",
+	"res://music/Simon05.wav",
+]
+const SONIDO_FALLO := "res://music/SimonFail.wav"
 @onready var botones = [$Button1, $Button2, $Button3, $Button4, $Button5]
 
 var secuencia = []
@@ -84,6 +92,8 @@ func _colocar_personaje() -> void:
 	)
 
 func _ready():
+	MusicManager.bajar_musica(-30.0, 1.0)
+
 	for i in range(botones.size()):
 		botones[i].pressed.connect(_on_boton_pressed.bind(i))
 		botones[i].modulate.a = 0.0
@@ -329,15 +339,15 @@ func nueva_ronda():
 	secuencia.append(randi() % botones.size())
 	await mostrar_secuencia()
 
-
 func mostrar_secuencia():
 	mostrando = true
 	for paso in secuencia:
-		await parpadear(botones[paso])
+		await parpadear(botones[paso], paso)
 		await get_tree().create_timer(0.3).timeout
 	mostrando = false
 
-func parpadear(boton):
+func parpadear(boton, indice):
+	MusicManager.reproducir_sfx(SONIDOS_CHARMS[indice])
 	var t_in := create_tween()
 	t_in.set_parallel(true)
 	for otro in botones:
@@ -362,12 +372,12 @@ func _on_boton_pressed(indice):
 		return
 	input_jugador.append(indice)
 	var paso_actual = input_jugador.size() - 1
-	if paso_actual >= secuencia.size():
+	if paso_actual >= secuencia.size() or input_jugador[paso_actual] != secuencia[paso_actual]:
 		reiniciar()
 		return
-	if input_jugador[paso_actual] != secuencia[paso_actual]:
-		reiniciar()
-		return
+
+	MusicManager.reproducir_sfx(SONIDOS_CHARMS[indice])
+
 	if input_jugador.size() == secuencia.size():
 		if secuencia.size() >= 5:
 			GameState.puzzles_solved[GameState.current_puzzle] = true
@@ -385,8 +395,11 @@ func _on_boton_pressed(indice):
 
 
 func reiniciar():
+	mostrando = true
+	MusicManager.reproducir_sfx(SONIDO_FALLO)
 	_tigre_dice(frases_por_idioma[Lang.actual]["reintentar"])
 	secuencia.clear()
 	input_jugador.clear()
 	ronda = 1
+	await get_tree().create_timer(0.9).timeout
 	nueva_ronda()
