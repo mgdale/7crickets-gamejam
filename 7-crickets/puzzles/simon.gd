@@ -15,8 +15,9 @@ var secuencia = []
 var input_jugador = []
 var ronda = 1
 var mostrando = false
+var label_progreso: Label
 
-# --- Intro: personaje, titulo y dialogo (mismo estilo visual que Memory) ---
+# --- Intro: personaje, titulo y dialogo---
 var textura_personaje: Texture2D = load("res://images/tigre.png")
 var textura_caja: Texture2D = load("res://images/caja_texto.png")
 var fuente_titulo: Font = load("res://fonts/chinese rocks rg.otf")
@@ -98,6 +99,9 @@ func _ready():
 		botones[i].pressed.connect(_on_boton_pressed.bind(i))
 		botones[i].modulate.a = 0.0
 
+	_fijar_tamano_charms()
+	_crear_progreso()
+	_crear_titulo()
 	_fijar_tamano_charms()
 	_crear_titulo()
 	_configurar_hover_charms()
@@ -337,6 +341,7 @@ func _on_charm_hover(boton: Button, entrando: bool) -> void:
 func nueva_ronda():
 	input_jugador.clear()
 	secuencia.append(randi() % botones.size())
+	_actualizar_progreso()
 	await mostrar_secuencia()
 
 func mostrar_secuencia():
@@ -366,6 +371,45 @@ func parpadear(boton, indice):
 	t_out.tween_property(boton, "scale", Vector2(1.0, 1.0), 0.12)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	await t_out.finished
+	
+func _crear_progreso() -> void:
+	label_progreso = Label.new()
+	label_progreso.add_theme_font_size_override("font_size", 56)
+	label_progreso.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
+	label_progreso.add_theme_color_override("font_outline_color", Color(1, 1, 1, 0.8))
+	label_progreso.add_theme_constant_override("outline_size", 6)
+	label_progreso.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label_progreso.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var viewport_size := get_viewport_rect().size
+	label_progreso.size = Vector2(600, 70)
+	label_progreso.position = Vector2((viewport_size.x - 600) / 2.0, 140.0)
+	add_child(label_progreso)
+
+
+func _actualizar_progreso() -> void:
+	var total := secuencia.size()
+	var hechos := input_jugador.size()
+	label_progreso.text = "●".repeat(hechos) + "○".repeat(max(total - hechos, 0))
+
+
+func _feedback_click(boton: Control) -> void:
+	boton.scale = Vector2(1.35, 1.35)
+	var t := create_tween()
+	t.set_parallel(true)
+	for otro in botones:
+		if otro != boton:
+			otro.modulate = Color(0.35, 0.35, 0.35)
+			t.tween_property(otro, "modulate", Color.WHITE, 0.3).set_delay(0.12)
+	t.tween_property(boton, "scale", Vector2(1.12, 1.12), 0.3)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+func _flash_error() -> void:
+	var t := create_tween()
+	t.set_parallel(true)
+	for b in botones:
+		b.modulate = Color(1.0, 0.3, 0.3)
+		t.tween_property(b, "modulate", Color.WHITE, 0.5).set_delay(0.15)
 
 func _on_boton_pressed(indice):
 	if mostrando:
@@ -377,9 +421,13 @@ func _on_boton_pressed(indice):
 		return
 
 	MusicManager.reproducir_sfx(SONIDOS_CHARMS[indice])
+	_feedback_click(botones[indice])
+	_actualizar_progreso()
 
 	if input_jugador.size() == secuencia.size():
 		if secuencia.size() >= 5:
+			mostrando = true
+			await get_tree().create_timer(0.5).timeout
 			GameState.puzzles_solved[GameState.current_puzzle] = true
 			var memoria_lista = GameState.puzzles_solved.get("memory", false)
 			var find_queen_lista = GameState.puzzles_solved.get("find_queen", false)
@@ -397,9 +445,11 @@ func _on_boton_pressed(indice):
 func reiniciar():
 	mostrando = true
 	MusicManager.reproducir_sfx(SONIDO_FALLO)
+	_flash_error()
 	_tigre_dice(frases_por_idioma[Lang.actual]["reintentar"])
 	secuencia.clear()
 	input_jugador.clear()
 	ronda = 1
+	_actualizar_progreso()
 	await get_tree().create_timer(0.9).timeout
 	nueva_ronda()
