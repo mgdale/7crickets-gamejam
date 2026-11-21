@@ -93,6 +93,7 @@ func _cerrar_popup_creditos(overlay: Control, capa: CanvasLayer) -> void:
 
 
 func _on_play_pressed() -> void:
+	GameState.reiniciar_partida()
 	MusicManager.reproducir_musica(MusicManager.MUSICA_HISTORIA)
 	
 	var fade := ColorRect.new()

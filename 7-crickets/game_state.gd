@@ -18,3 +18,9 @@ func go_to_puzzle(puzzle_name: String):
 func complete_current_puzzle():
 	puzzles_solved[current_puzzle] = true
 	get_tree().change_scene_to_file(MAP_SCENE)
+	
+func reiniciar_partida() -> void:
+	for clave in puzzles_solved.keys():
+		puzzles_solved[clave] = false
+	current_puzzle = ""
+	intro_mapa_mostrada = false
