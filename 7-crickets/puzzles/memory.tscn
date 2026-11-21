@@ -27,6 +27,7 @@ offset_bottom = 1000.0
 texture = ExtResource("2_4b23p")
 
 [node name="GridContainer" type="GridContainer" parent="." unique_id=610277297]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
