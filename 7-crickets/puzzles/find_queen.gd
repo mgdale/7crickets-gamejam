@@ -19,6 +19,7 @@ var fuente_dialogo: Font = load("res://fonts/Chinese_Ruler.ttf")
 @export var duracion_swap: float = 0.45
 @export var pausa_tras_fallo: float = 1.0
 @export var pausa_tras_acierto: float = 1.2
+@export var pausa_entre_swaps: float = 0.12
 
 var bloqueado := true
 
@@ -49,6 +50,31 @@ var dialogos_cerdo_por_idioma := {
 	],
 }
 
+@export var burbuja_offset_y: float = -110.0
+
+var cerdo_actual: TextureRect = null
+
+var frases_por_idioma := {
+	"en": {
+		"mira": "Remember where the fortune is!",
+		"sigue": "Follow the cards closely!",
+		"fallo": "Not that one! Pay attention!",
+		"acierto": "Well done! You found the fortune!",
+	},
+	"es": {
+		"mira": "¡Recuerda dónde está la fortuna!",
+		"sigue": "¡Sigue las cartas con atención!",
+		"fallo": "¡Esa no era! ¡Presta atención!",
+		"acierto": "¡Bien hecho! ¡Encontraste la fortuna!",
+	},
+	"fr": {
+		"mira": "Souviens-toi où est la fortune !",
+		"sigue": "Suis bien les cartes !",
+		"fallo": "Pas celle-là ! Fais attention !",
+		"acierto": "Bravo ! Tu as trouvé la fortune !",
+	},
+}
+
 var dialogos_cerdo := []
 
 func _colocar_cerdo() -> void:
@@ -66,6 +92,7 @@ func _colocar_cerdo() -> void:
 		viewport_size.x - cerdo_tamano.x - 20.0,
 		viewport_size.y - cerdo_tamano.y - 10.0 + cerdo_offset_y
 	)
+	cerdo_actual = cerdo
 
 func _ready():
 	cards = get_children().filter(func(n): return n.has_method("flip"))
@@ -77,15 +104,10 @@ func _ready():
 	_crear_titulo()
 	await Instrucciones.mostrar(textura_cerdo, titulos_por_idioma[Lang.actual], instrucciones_por_idioma[Lang.actual])
 	_colocar_cerdo()
-	show_face_up()
 
 	for card in cards:
 		card.pressed.connect(_on_card_pressed.bind(card))
-	await get_tree().create_timer(tiempo_mostrar).timeout
-	hide_cards()
-	await get_tree().create_timer(0.3).timeout
-	await shuffle()
-	bloqueado = false
+	await _iniciar_ronda()
 
 func _crear_titulo() -> void:
 	var panel := PanelContainer.new()
@@ -149,12 +171,14 @@ func shuffle():
 		while b == a:
 			b = randi() % cards.size()
 		await swap(cards[a], cards[b])
+		await get_tree().create_timer(pausa_entre_swaps).timeout
 
 
 func swap(card_a, card_b):
 	var pos_a = card_a.position
 	var pos_b = card_b.position
 	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(card_a, "position", pos_b, duracion_swap)
 	tween.parallel().tween_property(card_b, "position", pos_a, duracion_swap)
 	await tween.finished
@@ -165,6 +189,7 @@ func _on_card_pressed(card):
 	bloqueado = true
 	card.flip(true)
 	if card.card_id == queen_id:
+		_cerdo_dice(frases_por_idioma[Lang.actual]["acierto"])
 		await get_tree().create_timer(pausa_tras_acierto).timeout
 		GameState.puzzles_solved[GameState.current_puzzle] = true
 		var memoria_lista = GameState.puzzles_solved.get("memory", false)
@@ -174,9 +199,70 @@ func _on_card_pressed(card):
 		else:
 			get_tree().change_scene_to_file(GameState.MAP_SCENE)
 	else:
+		_cerdo_dice(frases_por_idioma[Lang.actual]["fallo"])
 		await get_tree().create_timer(pausa_tras_fallo).timeout
 		restart()
 
+func _cerdo_dice(mensaje: String) -> void:
+	if cerdo_actual == null:
+		return
+
+	var ancho_b := 340.0
+	var alto_b := 100.0
+	var burbuja := PanelContainer.new()
+	var estilo := StyleBoxTexture.new()
+	estilo.texture = textura_caja
+	estilo.texture_margin_left = 35
+	estilo.texture_margin_right = 35
+	estilo.texture_margin_top = 18
+	estilo.texture_margin_bottom = 18
+	estilo.content_margin_left = 28
+	estilo.content_margin_right = 28
+	estilo.content_margin_top = 14
+	estilo.content_margin_bottom = 14
+	estilo.modulate_color = Color(1, 1, 1, 0.85)
+	burbuja.add_theme_stylebox_override("panel", estilo)
+	burbuja.z_index = 6
+	burbuja.custom_minimum_size = Vector2(ancho_b, alto_b)
+	burbuja.size = Vector2(ancho_b, alto_b)
+	burbuja.pivot_offset = Vector2(ancho_b / 2.0, alto_b / 2.0)
+
+	# Hija de la escena (no del cerdo) para no heredar su transparencia
+	add_child(burbuja)
+	burbuja.position = cerdo_actual.position + Vector2(
+		cerdo_actual.size.x / 2.0 - ancho_b / 2.0, burbuja_offset_y
+	)
+	burbuja.modulate.a = 0
+	burbuja.scale = Vector2(0.7, 0.7)
+
+	var texto := Label.new()
+	texto.text = mensaje
+	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	texto.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	texto.autowrap_mode = TextServer.AUTOWRAP_WORD
+	texto.add_theme_font_size_override("font_size", 24)
+	texto.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
+	if fuente_dialogo:
+		texto.add_theme_font_override("font", fuente_dialogo)
+	burbuja.add_child(texto)
+
+	var t := create_tween()
+	t.tween_property(burbuja, "modulate:a", 1.0, 0.15)
+	t.parallel().tween_property(burbuja, "scale", Vector2(1.0, 1.0), 0.15)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	t.tween_interval(1.2)
+	t.tween_property(burbuja, "modulate:a", 0.0, 0.2)
+	t.tween_callback(burbuja.queue_free)
+	
+func _iniciar_ronda() -> void:
+	show_face_up()
+	_cerdo_dice(frases_por_idioma[Lang.actual]["mira"])
+	await get_tree().create_timer(tiempo_mostrar).timeout
+	hide_cards()
+	await get_tree().create_timer(0.3).timeout
+	_cerdo_dice(frases_por_idioma[Lang.actual]["sigue"])
+	await shuffle()
+	bloqueado = false
 
 func restart():
 	for card in cards:
@@ -184,10 +270,4 @@ func restart():
 	hide_cards()
 	await get_tree().create_timer(0.3).timeout
 	assign_queen()
-	show_face_up()
-	await get_tree().create_timer(tiempo_mostrar).timeout
-	hide_cards()
-	await get_tree().create_timer(0.3).timeout
-	await shuffle()
-	bloqueado = false
-	
+	await _iniciar_ronda()
