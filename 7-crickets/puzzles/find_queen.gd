@@ -14,6 +14,13 @@ var fuente_dialogo: Font = load("res://fonts/Chinese_Ruler.ttf")
 @export var cerdo_duracion_caminata: float = 2.2
 @export var cerdo_duracion_por_texto: float = 1.8
 @export var cerdo_indice_en_arbol: int = 1
+@export var tiempo_mostrar: float = 1.5
+@export var pasos_mezcla: int = 5
+@export var duracion_swap: float = 0.45
+@export var pausa_tras_fallo: float = 1.0
+@export var pausa_tras_acierto: float = 1.2
+
+var bloqueado := true
 
 var titulos_por_idioma := {
 	"en": "Find the fortune",
@@ -74,9 +81,11 @@ func _ready():
 
 	for card in cards:
 		card.pressed.connect(_on_card_pressed.bind(card))
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(tiempo_mostrar).timeout
 	hide_cards()
+	await get_tree().create_timer(0.3).timeout
 	await shuffle()
+	bloqueado = false
 
 func _crear_titulo() -> void:
 	var panel := PanelContainer.new()
@@ -134,26 +143,29 @@ func hide_cards():
 
 
 func shuffle():
-	for i in range(4):
+	for i in range(pasos_mezcla):
 		var a = randi() % cards.size()
 		var b = randi() % cards.size()
-		if a != b:
-			await swap(cards[a], cards[b])
+		while b == a:
+			b = randi() % cards.size()
+		await swap(cards[a], cards[b])
 
 
 func swap(card_a, card_b):
 	var pos_a = card_a.position
 	var pos_b = card_b.position
 	var tween = create_tween()
-	tween.tween_property(card_a, "position", pos_b, 0.4)
-	tween.parallel().tween_property(card_b, "position", pos_a, 0.4)
+	tween.tween_property(card_a, "position", pos_b, duracion_swap)
+	tween.parallel().tween_property(card_b, "position", pos_a, duracion_swap)
 	await tween.finished
 
-
 func _on_card_pressed(card):
+	if bloqueado:
+		return
+	bloqueado = true
 	card.flip(true)
 	if card.card_id == queen_id:
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(pausa_tras_acierto).timeout
 		GameState.puzzles_solved[GameState.current_puzzle] = true
 		var memoria_lista = GameState.puzzles_solved.get("memory", false)
 		var simon_listo = GameState.puzzles_solved.get("simon", false)
@@ -162,16 +174,20 @@ func _on_card_pressed(card):
 		else:
 			get_tree().change_scene_to_file(GameState.MAP_SCENE)
 	else:
-		await get_tree().create_timer(1.5).timeout
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(pausa_tras_fallo).timeout
 		restart()
 
 
 func restart():
 	for card in cards:
 		card.found = false
+	hide_cards()
+	await get_tree().create_timer(0.3).timeout
 	assign_queen()
 	show_face_up()
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(tiempo_mostrar).timeout
 	hide_cards()
+	await get_tree().create_timer(0.3).timeout
 	await shuffle()
+	bloqueado = false
+	
