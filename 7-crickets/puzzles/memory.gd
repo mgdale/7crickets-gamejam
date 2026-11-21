@@ -207,7 +207,6 @@ func _colocar_coneja() -> void:
 
 
 func _coneja_dice(mensaje: String) -> void:
-	# Igual que _tigre_dice de Simon: burbuja corta sobre el personaje
 	if coneja_actual == null:
 		return
 
