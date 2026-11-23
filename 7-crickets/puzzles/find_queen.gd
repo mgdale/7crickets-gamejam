@@ -1,14 +1,6 @@
 extends Control
 
-var cards = []
-var positions = []
-var queen_id = 1
-
-var textura_cerdo: Texture2D = load("res://images/cerdo.png")
-var textura_caja: Texture2D = load("res://images/caja_texto.png")
-var fuente_titulo: Font = load("res://fonts/chinese rocks rg.otf")
-var fuente_dialogo: Font = load("res://fonts/Chinese_Ruler.ttf")
-
+@export var rondas_necesarias: int = 3
 @export var cerdo_tamano: Vector2 = Vector2(660, 660)
 @export var cerdo_offset_y: float = -50.0
 @export var cerdo_duracion_caminata: float = 2.2
@@ -21,6 +13,18 @@ var fuente_dialogo: Font = load("res://fonts/Chinese_Ruler.ttf")
 @export var pausa_tras_acierto: float = 1.2
 @export var pausa_entre_swaps: float = 0.12
 
+var aciertos := 0
+var label_progreso: Label
+
+var cards = []
+var positions = []
+var queen_id = 1
+
+var textura_cerdo: Texture2D = load("res://images/cerdo.png")
+var textura_caja: Texture2D = load("res://images/caja_texto.png")
+var fuente_titulo: Font = load("res://fonts/chinese rocks rg.otf")
+var fuente_dialogo: Font = load("res://fonts/Chinese_Ruler.ttf")
+
 var bloqueado := true
 
 var titulos_por_idioma := {
@@ -30,9 +34,9 @@ var titulos_por_idioma := {
 }
 
 var instrucciones_por_idioma := {
-	"en": "Hey, little fella! The preparations for the new year are ready, so pay attention!\n\nWatch which card holds the fortune, then follow the cards as they shuffle. Pick the right one!",
-	"es": "¡Oye, pequeño! Los preparativos para el año nuevo están listos, ¡así que presta atención!\n\nMira qué carta guarda la fortuna y sigue las cartas mientras se mezclan. ¡Elige la correcta!",
-	"fr": "Hé, petit ! Les préparatifs pour la nouvelle année sont prêts, alors fais bien attention !\n\nRegarde quelle carte cache la fortune, puis suis les cartes pendant qu'elles se mélangent. Choisis la bonne !",
+	"en": "Hey, little fella! The preparations for the new year are ready, so pay attention!\n\nWatch which card holds the fortune, then follow the cards as they shuffle. Find it 3 times in a row! If you miss, you start over.",
+	"es": "¡Oye, pequeño! Los preparativos para el año nuevo están listos, ¡así que presta atención!\n\nMira qué carta guarda la fortuna y sigue las cartas mientras se mezclan. ¡Encuéntrala 3 veces seguidas! Si fallas, empiezas de nuevo.",
+	"fr": "Hé, petit ! Les préparatifs pour la nouvelle année sont prêts, alors fais bien attention !\n\nRegarde quelle carte cache la fortune, puis suis les cartes pendant qu'elles se mélangent. Trouve-la 3 fois de suite ! Si tu te trompes, tu recommences.",
 }
 
 var dialogos_cerdo_por_idioma := {
@@ -58,19 +62,22 @@ var frases_por_idioma := {
 	"en": {
 		"mira": "Remember where the fortune is!",
 		"sigue": "Follow the cards closely!",
-		"fallo": "Not that one! Pay attention!",
+		"ronda_ok": "Correct! Once more!",
+		"fallo": "Not that one! Let's start over!",
 		"acierto": "Well done! You found the fortune!",
 	},
 	"es": {
 		"mira": "¡Recuerda dónde está la fortuna!",
 		"sigue": "¡Sigue las cartas con atención!",
-		"fallo": "¡Esa no era! ¡Presta atención!",
+		"ronda_ok": "¡Correcto! ¡Otra vez!",
+		"fallo": "¡Esa no era! ¡Empezamos de nuevo!",
 		"acierto": "¡Bien hecho! ¡Encontraste la fortuna!",
 	},
 	"fr": {
 		"mira": "Souviens-toi où est la fortune !",
 		"sigue": "Suis bien les cartes !",
-		"fallo": "Pas celle-là ! Fais attention !",
+		"ronda_ok": "Correct ! Encore une fois !",
+		"fallo": "Pas celle-là ! On recommence !",
 		"acierto": "Bravo ! Tu as trouvé la fortune !",
 	},
 }
@@ -102,6 +109,7 @@ func _ready():
 	assign_queen()
 
 	_crear_titulo()
+	_crear_progreso()
 	await Instrucciones.mostrar(textura_cerdo, titulos_por_idioma[Lang.actual], instrucciones_por_idioma[Lang.actual])
 	_colocar_cerdo()
 
@@ -165,7 +173,7 @@ func hide_cards():
 
 
 func shuffle():
-	for i in range(pasos_mezcla):
+	for i in range(pasos_mezcla + aciertos * 2):
 		var a = randi() % cards.size()
 		var b = randi() % cards.size()
 		while b == a:
@@ -188,17 +196,27 @@ func _on_card_pressed(card):
 		return
 	bloqueado = true
 	card.flip(true)
+
 	if card.card_id == queen_id:
-		_cerdo_dice(frases_por_idioma[Lang.actual]["acierto"])
-		await get_tree().create_timer(pausa_tras_acierto).timeout
-		GameState.puzzles_solved[GameState.current_puzzle] = true
-		var memoria_lista = GameState.puzzles_solved.get("memory", false)
-		var simon_listo = GameState.puzzles_solved.get("simon", false)
-		if memoria_lista and simon_listo:
-			get_tree().change_scene_to_file("res://scenes/escena_17.tscn")
+		aciertos += 1
+		_actualizar_progreso()
+		if aciertos >= rondas_necesarias:
+			_cerdo_dice(frases_por_idioma[Lang.actual]["acierto"])
+			await get_tree().create_timer(pausa_tras_acierto).timeout
+			GameState.puzzles_solved[GameState.current_puzzle] = true
+			var memoria_lista = GameState.puzzles_solved.get("memory", false)
+			var simon_listo = GameState.puzzles_solved.get("simon", false)
+			if memoria_lista and simon_listo:
+				get_tree().change_scene_to_file("res://scenes/escena_17.tscn")
+			else:
+				get_tree().change_scene_to_file(GameState.MAP_SCENE)
 		else:
-			get_tree().change_scene_to_file(GameState.MAP_SCENE)
+			_cerdo_dice(frases_por_idioma[Lang.actual]["ronda_ok"])
+			await get_tree().create_timer(pausa_tras_acierto).timeout
+			restart()
 	else:
+		aciertos = 0
+		_actualizar_progreso()
 		_cerdo_dice(frases_por_idioma[Lang.actual]["fallo"])
 		await get_tree().create_timer(pausa_tras_fallo).timeout
 		restart()
@@ -253,6 +271,28 @@ func _cerdo_dice(mensaje: String) -> void:
 	t.tween_interval(1.2)
 	t.tween_property(burbuja, "modulate:a", 0.0, 0.2)
 	t.tween_callback(burbuja.queue_free)
+	
+func _crear_progreso() -> void:
+	label_progreso = Label.new()
+	label_progreso.add_theme_font_size_override("font_size", 56)
+	label_progreso.add_theme_color_override("font_color", Color(0.35, 0.1, 0.1))
+	label_progreso.add_theme_color_override("font_outline_color", Color(1, 1, 1, 0.8))
+	label_progreso.add_theme_constant_override("outline_size", 6)
+	label_progreso.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label_progreso.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var viewport_size := get_viewport_rect().size
+	label_progreso.size = Vector2(600, 70)
+	label_progreso.pivot_offset = Vector2(300, 35)
+	label_progreso.position = Vector2((viewport_size.x - 600) / 2.0, 150.0)
+	add_child(label_progreso)
+	_actualizar_progreso()
+
+func _actualizar_progreso() -> void:
+	label_progreso.text = "●".repeat(aciertos) + "○".repeat(max(rondas_necesarias - aciertos, 0))
+	label_progreso.scale = Vector2(1.25, 1.25)
+	var t := create_tween()
+	t.tween_property(label_progreso, "scale", Vector2(1.0, 1.0), 0.25)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	
 func _iniciar_ronda() -> void:
 	show_face_up()

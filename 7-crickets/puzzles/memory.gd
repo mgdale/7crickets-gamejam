@@ -7,10 +7,10 @@ const TEXTURA_REVERSO := "res://images/classic.png"
 const TEXTURAS_FRENTE := [
 	"res://images/match.png",
 	"res://images/generic.png",
-	"res://images/memory_3.png",
-	"res://images/memory_4.png",
-	"res://images/memory_5.png",
-	"res://images/memory_6.png",
+	"res://images/pareja1.png",
+	"res://images/pareja2.png",
+	"res://images/pareja3.png",
+	"res://images/pareja4.png",
 ]
 const SFX_ACIERTO := "res://music/memory_acierto.mp3"
 const SFX_FALLO := "res://music/memory_fallo.mp3"
